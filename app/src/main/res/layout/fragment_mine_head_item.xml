@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:orientation="horizontal"
-    android:background="#5E5E5E">
+    android:orientation="horizontal">
 
     <com.example.graduatetravell.CircleImageView
         android:id="@+id/head_imageView"

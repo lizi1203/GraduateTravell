@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         mainFragments.add(BlankFragment.newInstance("游记","1"));
         mainFragments.add(BlankFragment.newInstance("热门","2"));
         mainFragments.add(BlankFragment.newInstance("新闻","3"));
-        mainFragments.add(BlankFragment.newInstance("我的","4"));
+        mainFragments.add(MineFragment.newInstance("我的","4"));
         //init ViewPager
         mainAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),4) {
             @NonNull
