@@ -1,5 +1,6 @@
 package com.example.graduatetravell;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public class MineFragment extends Fragment {
     private String mParam2;
 
     private ListView mineListView;
+    private View view;
 
     private List<MineListItemModal> mineListItemModals = new ArrayList<>();
 
@@ -65,13 +68,14 @@ public class MineFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         initData();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_mine, container, false);
+        view = inflater.inflate(R.layout.fragment_mine, container, false);
         mineListView = view.findViewById(R.id.minelist);
 
         MineAdapter adapter = new MineAdapter(
@@ -81,12 +85,24 @@ public class MineFragment extends Fragment {
     }
 
     private void initData() {
-        mineListItemModals.add(new MineListItemModal("UserName",R.drawable.head));
-        mineListItemModals.add(new MineListItemModal("游记",R.drawable.hot));
-        mineListItemModals.add(new MineListItemModal("热门",R.drawable.hot));
-        mineListItemModals.add(new MineListItemModal("新闻",R.drawable.hot));
-        mineListItemModals.add(new MineListItemModal("退出登录",0));
+        mineListItemModals.add(new MineListItemModal("UserName",R.drawable.head,0));
+        mineListItemModals.add(new MineListItemModal("游记",R.drawable.mystory,1));
+        mineListItemModals.add(new MineListItemModal("热门",R.drawable.myhot,1));
+        mineListItemModals.add(new MineListItemModal("新闻",R.drawable.mynews,1));
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        //退出登录点击事件
+        Button logout_Button = (Button) view.findViewById(R.id.logout_button);
+        logout_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent logoutIntent = new Intent(getContext(), LoginActivity.class);
+                startActivity(logoutIntent);
+            }
+        });
+    }
 
 }

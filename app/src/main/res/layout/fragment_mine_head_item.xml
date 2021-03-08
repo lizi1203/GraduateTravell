@@ -3,30 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="180dp"
     android:orientation="horizontal">
 
     <com.example.graduatetravell.CircleImageView
-        android:id="@+id/head_imageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/head_item_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="25dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/head"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/head"
-        android:scaleType="centerCrop"/>
+
+        />
 
     <TextView
-        android:id="@+id/userName_textView"
+        android:id="@+id/head_item_name"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="60dp"
-        android:gravity="center"
+        android:layout_marginLeft="40dp"
         android:text="Lizi1203"
+        android:gravity="center_vertical"
         android:textAppearance="?attr/textAppearanceHeadline4"
         android:textColor="@color/white"
-        app:layout_constraintStart_toEndOf="@+id/head_imageView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/head_item_image"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MineFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/minelist"
-        android:name="com.example.graduatetravell.MineItemFragment"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        tools:listitem="@layout/fragment_mine_head_item" />
+        android:layout_height="match_parent">
+        <!-- TODO: Update blank fragment layout -->
+        <ListView
+            android:id="@+id/minelist"
+            android:name="com.example.graduatetravell.MineItemFragment"
+            android:layout_width="395dp"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"></ListView>
+
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="500dp"
+            android:backgroundTint="@android:color/transparent"
+            android:text="退出登录"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/minelist" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 </FrameLayout>
