@@ -6,7 +6,7 @@
     android:layout_height="180dp"
     android:orientation="horizontal">
 
-    <com.example.graduatetravell.CircleImageView
+    <com.example.graduatetravell.Mine.CircleImageView
         android:id="@+id/head_item_image"
         android:layout_width="80dp"
         android:layout_height="80dp"
