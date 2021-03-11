@@ -126,7 +126,8 @@ public class StoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_story, container, false);
-        Banner banner = view.findViewById(R.id.story_banner);
+        View header = inflater.inflate(R.layout.banner_item, container, false);
+        Banner banner = header.findViewById(R.id.story_banner);
         banner.setBannerStyle(BannerConfig. CIRCLE_INDICATOR_TITLE_INSIDE);
         banner.setImageLoader( new MyLoader());
         banner.setBannerTitles(imageTitle);
@@ -153,7 +154,11 @@ public class StoryFragment extends Fragment {
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
         recyclerView.setLayoutManager(layoutManager);
         adapter = new StoryRecyclerAdapter(getContext(), storyRecyclerItemModals);
+        //设置headerview
+        adapter.setHeaderView(banner);
         recyclerView.setAdapter(adapter);
+
+
 
         return view;
     }

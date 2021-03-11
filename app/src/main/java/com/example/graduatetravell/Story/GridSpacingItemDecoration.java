@@ -22,7 +22,8 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
 
         //这里是关键，需要根据你有几列来判断
-        int position = parent.getChildAdapterPosition(view); // item position
+        int position = parent.getChildAdapterPosition(view)-1; // item position
+        if(position < 0) return;
         int column = position % spanCount; // item column
 
         if (includeEdge) {
