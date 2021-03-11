@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.graduatetravell.R;
+import com.example.graduatetravell.Story.StoryRecyclerItemModal;
 
 import java.util.List;
 

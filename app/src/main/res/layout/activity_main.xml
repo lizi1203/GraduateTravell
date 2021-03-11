@@ -4,73 +4,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_noword"
+    android:background="@color/black"
     tools:context=".MainActivity">
 
     <!--滑动视图-->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/main_viewPage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_noword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--底部导航栏-->
     <RadioGroup
         android:id="@+id/mainTabs_radioGroup"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:background="#5E5E5E"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <!--导航栏按钮-->
-    <RadioButton
-        android:id="@+id/notes_tab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@null"
-        android:checked="true"
-        android:drawableTop="@drawable/notes_tab_image_selector"
-        android:text="游记"
-        android:textSize="18dp"
-        android:textColor="@drawable/radiobutton_color_selector"
-        android:layout_weight="0.25"
-        android:gravity="center_horizontal" />
+        <!--导航栏按钮-->
+        <RadioButton
+            android:id="@+id/notes_tab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/notes_tab_image_selector"
+            android:gravity="center_horizontal"
+            android:text="游记"
+            android:textColor="@drawable/radiobutton_color_selector"
+            android:textSize="18dp" />
 
-    <RadioButton
-        android:id="@+id/hot_tab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@null"
-        android:drawableTop="@drawable/hot_tab_image_selector"
-        android:text="热门"
-        android:textSize="18dp"
-        android:textColor="@drawable/radiobutton_color_selector"
-        android:layout_weight="0.25"
-        android:gravity="center_horizontal"/>
+        <RadioButton
+            android:id="@+id/hot_tab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:button="@null"
+            android:drawableTop="@drawable/hot_tab_image_selector"
+            android:gravity="center_horizontal"
+            android:text="热门"
+            android:textColor="@drawable/radiobutton_color_selector"
+            android:textSize="18dp" />
 
-    <RadioButton
-        android:id="@+id/news_tab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@null"
-        android:drawableTop="@drawable/news_tab_image_selector"
-        android:text="新闻"
-        android:textSize="18dp"
-        android:textColor="@drawable/radiobutton_color_selector"
-        android:layout_weight="0.25"
-        android:gravity="center_horizontal"/>
+        <RadioButton
+            android:id="@+id/news_tab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:button="@null"
+            android:drawableTop="@drawable/news_tab_image_selector"
+            android:gravity="center_horizontal"
+            android:text="新闻"
+            android:textColor="@drawable/radiobutton_color_selector"
+            android:textSize="18dp" />
 
-    <RadioButton
-        android:id="@+id/mine_tab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@null"
-        android:drawableTop="@drawable/mine_tab_umage_selector"
-        android:text="我的"
-        android:textSize="18dp"
-        android:textColor="@drawable/radiobutton_color_selector"
-        android:layout_weight="0.25"
-        android:gravity="center_horizontal"/>
+        <RadioButton
+            android:id="@+id/mine_tab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:button="@null"
+            android:drawableTop="@drawable/mine_tab_umage_selector"
+            android:gravity="center_horizontal"
+            android:text="我的"
+            android:textColor="@drawable/radiobutton_color_selector"
+            android:textSize="18dp" />
     </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
