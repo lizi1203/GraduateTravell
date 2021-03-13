@@ -12,7 +12,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GraduateTravell.newActionBar">
+        android:theme="@style/Theme.GraduateTravell.newActionBar"
+        android:usesCleartextTraffic="true">
         <activity android:name=".Story.WebActivity"></activity>
         <activity android:name=".MainActivity"></activity>
         <activity

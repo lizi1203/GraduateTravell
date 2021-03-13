@@ -1,6 +1,8 @@
 package com.example.graduatetravell.News;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.graduatetravell.MainActivity;
 import com.example.graduatetravell.R;
+import com.example.graduatetravell.Story.WebActivity;
 
 import java.util.ArrayList;
 
@@ -37,8 +41,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
         NewsListItemModal newsItem = newsListItemModalArrayList.get(position);
         holder.title.setText(newsItem.getTitle());
         holder.author.setText(newsItem.getAuthor());
-        holder.readTime.setText(newsItem.getReadTime());
         Glide.with(context).load(newsItem.getNewsImage()).into(holder.newsImage);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent webIntent = new Intent(context, WebActivity.class);
+                webIntent.putExtra("url",newsItem.getUrl());
+                context.startActivity(webIntent);
+            }
+        });
     }
 
 
@@ -52,8 +64,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
         private TextView title;
         //作者
         private TextView author;
-        //阅读时长
-        private TextView readTime;
         //图片
         private ImageView newsImage;
 
@@ -63,7 +73,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
             title = (TextView) itemView.findViewById(R.id.news_title);
             newsImage = (ImageView) itemView.findViewById(R.id.news_image);
             author = (TextView) itemView.findViewById(R.id.news_author);
-            readTime = itemView.findViewById(R.id.news_readTime);
         }
 
     }

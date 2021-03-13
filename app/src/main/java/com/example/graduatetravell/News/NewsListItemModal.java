@@ -9,16 +9,17 @@ public class NewsListItemModal {
     private String title;
     //作者
     private String author;
-    //阅读时长
-    private String readTime;
+
     //图片
     private String newsImage;
+    //网址
+    private String url;
 
-    public NewsListItemModal(String title, String author, String readTime, String newsImage) {
+    public NewsListItemModal(String title, String author, String newsImage,String url) {
         this.title = title;
         this.author = author;
-        this.readTime = readTime;
         this.newsImage = newsImage;
+        this.url = url;
     }
 
     public NewsListItemModal() {
@@ -41,13 +42,6 @@ public class NewsListItemModal {
         this.author = author;
     }
 
-    public String getReadTime() {
-        return readTime;
-    }
-
-    public void setReadTime(String readTime) {
-        this.readTime = readTime;
-    }
 
     public String getNewsImage() {
         return newsImage;
@@ -55,5 +49,13 @@ public class NewsListItemModal {
 
     public void setNewsImage(String newsImage) {
         this.newsImage = newsImage;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -32,6 +32,7 @@ public class WebActivity extends AppCompatActivity {
         }
 
         Intent webIntent = getIntent();
+        String url = webIntent.getStringExtra("url");
         int position = webIntent.getIntExtra("position",0);
         webURL = new ArrayList<String>(3);
         webURL.add("https://bbs.qyer.com/thread-3469562-1.html");
@@ -47,8 +48,14 @@ public class WebActivity extends AppCompatActivity {
 
         webSettings.setDomStorageEnabled(true);//设置适应Html5 重点是这个设置
 
-        //访问网页
-        webView.loadUrl(webURL.get(position));
+        if(url != null){
+            //访问网页
+            webView.loadUrl(url);
+        }
+        else {
+            //访问网页
+            webView.loadUrl(webURL.get(position));
+        }
         //系统默认会通过手机浏览器打开网页，为了能够直接通过WebView显示网页，则必须设置
         webView.setWebViewClient(new WebViewClient(){
             @Override

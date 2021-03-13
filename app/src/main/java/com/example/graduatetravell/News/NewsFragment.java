@@ -7,14 +7,26 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.graduatetravell.Manager.DataManager;
 import com.example.graduatetravell.R;
 import com.example.graduatetravell.Story.StoryRecyclerAdapter;
+import com.google.gson.Gson;
 
+import java.io.BufferedReader;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +48,8 @@ public class NewsFragment extends Fragment {
     private NewsAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<NewsListItemModal> newsListItemModalArrayList = new ArrayList<>();
+
+    Handler handler;
 
     public NewsFragment() {
         // Required empty public constructor
@@ -68,17 +82,72 @@ public class NewsFragment extends Fragment {
         }
 
         initRecyclerViewData();
+        handler = new Handler(){
+            public void handleMessage(Message msg)
+            {
+                if (msg.what == 3)
+                {
+                    newsListItemModalArrayList = (ArrayList<NewsListItemModal>) msg.obj;
+                    adapter = new NewsAdapter(getContext(),newsListItemModalArrayList);
+                    adapter.notifyDataSetChanged();
+                }
+                else
+                {
+
+                }
+            }
+
+        };
     }
 
     private void initRecyclerViewData() {
-        for(int i = 0;i < 10;i++){
-            NewsListItemModal newModal = new NewsListItemModal();
-            newModal.setTitle("This is news "+i);
-            newModal.setAuthor("Lizi1203 ");
-            newModal.setReadTime("•"+i+"minutes");
-            newModal.setNewsImage("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1843764184,3657248213&fm=26&gp=0.jpg");
-            newsListItemModalArrayList.add(newModal);
-        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpURLConnection connection = null;
+                BufferedReader reader = null;
+
+                try {
+                    OkHttpClient client = new OkHttpClient.Builder()
+                            .connectTimeout(5000, TimeUnit.MILLISECONDS)
+                            .readTimeout(5000, TimeUnit.MILLISECONDS)
+                            .build();//创建OkHttpClient对象
+                    Request request = new Request.Builder()
+                            .url("http://news-at.zhihu.com/api/3/news/latest")//请求接口。如果需要传参拼接到接口后面。
+                            .build();//创建Request 对象
+                    Response response = null;
+                    response = client.newCall(request).execute();//得到Response 对象
+                    if (response.isSuccessful()) {
+                        String responseData = response.body().string();
+
+                        NewsResultBean resultBean = new Gson().fromJson(responseData,NewsResultBean.class);
+                        //对象中拿到集合
+                        List<NewsResultBean.StoryBean> storyBeanList = resultBean.getStories();
+                        List<NewsResultBean.StoryBeanT> storyBeanTList = resultBean.getTop_stories();
+
+                        newsListItemModalArrayList = new ArrayList<>();
+                        for(NewsResultBean.StoryBean storyBean : storyBeanList){
+                            NewsListItemModal newModal = new NewsListItemModal(storyBean.getTitle(),storyBean.getHint(),storyBean.getImages().get(0),storyBean.getUrl());
+                            newsListItemModalArrayList.add(newModal);
+                        }
+
+                        for(NewsResultBean.StoryBeanT storyBeanT : storyBeanTList){
+                            NewsListItemModal newModal = new NewsListItemModal(storyBeanT.getTitle(),storyBeanT.getHint(),storyBeanT.getImage(),storyBeanT.getUrl());
+                            newsListItemModalArrayList.add(newModal);
+                        }
+                        //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
+                        Message message = new Message();
+                        message.what = 3;
+                        message.obj = newsListItemModalArrayList;
+                        handler.sendMessage(message);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
     }
 
     @Override
@@ -89,7 +158,7 @@ public class NewsFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.news_recyclerView);
         layoutManager = new LinearLayoutManager(getContext());
-        adapter = new NewsAdapter(getContext(),newsListItemModalArrayList);
+
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
