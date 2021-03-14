@@ -19,6 +19,7 @@ public class WebActivity extends AppCompatActivity {
 
     private WebView webView;
     private ArrayList<String> webURL;
+    private ArrayList<String> relaxWebURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +35,16 @@ public class WebActivity extends AppCompatActivity {
         Intent webIntent = getIntent();
         String url = webIntent.getStringExtra("url");
         int position = webIntent.getIntExtra("position",0);
+        String fragment = webIntent.getStringExtra("fragment");
         webURL = new ArrayList<String>(3);
         webURL.add("https://bbs.qyer.com/thread-3469562-1.html");
         webURL.add("https://bbs.qyer.com/thread-3522102-1.html");
         webURL.add("https://bbs.qyer.com/thread-3523739-1.html");
+
+        relaxWebURL = new ArrayList<String>(3);
+        relaxWebURL.add("https://bbs.qyer.com/thread-3525592-1.html");
+        relaxWebURL.add("https://bbs.qyer.com/thread-3521659-1.html");
+        relaxWebURL.add("https://bbs.qyer.com/thread-3495611-1.html");
 
         webView = findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();
@@ -53,8 +60,13 @@ public class WebActivity extends AppCompatActivity {
             webView.loadUrl(url);
         }
         else {
-            //访问网页
-            webView.loadUrl(webURL.get(position));
+            if(fragment != null){
+                //访问网页
+                webView.loadUrl(relaxWebURL.get(position));
+            }else {
+                //访问网页
+                webView.loadUrl(webURL.get(position));
+            }
         }
         //系统默认会通过手机浏览器打开网页，为了能够直接通过WebView显示网页，则必须设置
         webView.setWebViewClient(new WebViewClient(){

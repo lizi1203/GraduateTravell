@@ -1,48 +1,36 @@
-package com.example.graduatetravell.Story;
+package com.example.graduatetravell.Relax;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
-import com.example.graduatetravell.LoginActivity;
-import com.example.graduatetravell.Manager.DataManager;
-import com.example.graduatetravell.Mine.MineListItemModal;
-import com.example.graduatetravell.News.NewsAdapter;
-import com.example.graduatetravell.News.NewsListItemModal;
-import com.example.graduatetravell.News.NewsResultBean;
 import com.example.graduatetravell.R;
-import com.example.graduatetravell.RegisterActivity;
+import com.example.graduatetravell.Story.GridSpacingItemDecoration;
+import com.example.graduatetravell.Story.StoryFragment;
+import com.example.graduatetravell.Story.StoryRecyclerAdapter;
+import com.example.graduatetravell.Story.StoryRecyclerItemModal;
+import com.example.graduatetravell.Story.StoryResultBean;
+import com.example.graduatetravell.Story.WebActivity;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.orhanobut.logger.Logger;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
-
 
 import java.io.BufferedReader;
 import java.net.HttpURLConnection;
@@ -54,15 +42,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-
-import static android.content.ContentValues.TAG;
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link StoryFragment#newInstance} factory method to
+ * Use the {@link RelaxFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StoryFragment extends Fragment {
+public class RelaxFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -72,6 +57,7 @@ public class StoryFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
     //banner部分数据
     List<String> imageURL;
     List<String> imageTitle;
@@ -80,11 +66,10 @@ public class StoryFragment extends Fragment {
     private RecyclerView recyclerView;
     private StoryRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<StoryRecyclerItemModal> storyRecyclerItemModals = new ArrayList<StoryRecyclerItemModal>();
+    private ArrayList<StoryRecyclerItemModal> relaxRecyclerItemModals = new ArrayList<StoryRecyclerItemModal>();
     Handler handler;
 
-
-    public StoryFragment() {
+    public RelaxFragment() {
         // Required empty public constructor
     }
 
@@ -94,11 +79,11 @@ public class StoryFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment StoryFragment.
+     * @return A new instance of fragment BlankFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static StoryFragment newInstance(String param1, String param2) {
-        StoryFragment fragment = new StoryFragment();
+    public static RelaxFragment newInstance(String param1, String param2) {
+        RelaxFragment fragment = new RelaxFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -113,14 +98,15 @@ public class StoryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
         initBannerData();
         initRecyclerData();
         handler = new Handler(){
             public void handleMessage(Message msg)
             {
-                if (msg.what == 1)
+                if (msg.what == 2)
                 {
-                    storyRecyclerItemModals = (ArrayList<StoryRecyclerItemModal>) msg.obj;
+                    relaxRecyclerItemModals = (ArrayList<StoryRecyclerItemModal>) msg.obj;
                 }
                 else
                 {
@@ -133,14 +119,14 @@ public class StoryFragment extends Fragment {
 
     private void initBannerData() {
         imageURL = new ArrayList<String>();
-        imageURL.add("https://pic.qyer.com/album/user/3904/2/QkBVRhoFaEo/index/680x400");
-        imageURL.add("https://pic.qyer.com/album/user/3956/11/QkBQRBsGaEg/index/680x400");
-        imageURL.add("https://pic.qyer.com/album/user/3955/47/QkBQRx4AYUA/index/680x400");
+        imageURL.add("https://pic.qyer.com/album/user/3956/18/QkBQRBsPYUg/index/680x400");
+        imageURL.add("https://pic.qyer.com/album/user/3954/53/QkBQRh8EZkg/index/680x400");
+        imageURL.add("https://pic.qyer.com/album/user/3922/55/QkBXQB8CY0k/index/680x400");
 
         imageTitle = new ArrayList<String>();
-        imageTitle.add("【西域梦游记】故土新归 | 新疆姑娘带你赏遍南疆秘境！（金秋国庆深度自驾攻略)");
-        imageTitle.add("烟火中的未知地带——2021，我在【苗乡侗寨】自驾过年 (贵州 黔东南 18个村寨记事)");
-        imageTitle.add("巴厘岛 | 总有一个假日，要属于bali");
+        imageTitle.add("嘿，樱花~请你等等我！三刷日本终于看到樱花满开的真面目");
+        imageTitle.add("一路向南，为我们知道的厦门、为我们不知道漳州、广州、深圳");
+        imageTitle.add("【一休妈】川西南行纪，没错，就是丁真的家乡");
     }
 
     private void initRecyclerData() {
@@ -156,7 +142,7 @@ public class StoryFragment extends Fragment {
                             .readTimeout(5000, TimeUnit.MILLISECONDS)
                             .build();//创建OkHttpClient对象
                     Request request = new Request.Builder()
-                            .url("http://api.breadtrip.com/v2/index/?next_start=1")//请求接口。如果需要传参拼接到接口后面。
+                            .url("http://api.breadtrip.com/v2/new_trip/spot/hot/list/?start=%d")//请求接口。如果需要传参拼接到接口后面。
                             .build();//创建Request 对象
                     Response response = null;
                     response = client.newCall(request).execute();//得到Response 对象
@@ -167,25 +153,21 @@ public class StoryFragment extends Fragment {
                         JsonObject data = jsonObject.get("data").getAsJsonObject();
 
 
-                        StoryResultBean storyResultBean = new Gson().fromJson(data,StoryResultBean.class);
+                        RelaxResultBean relaxResultBean = new Gson().fromJson(data,RelaxResultBean.class);
                         //对象中拿到集合
-                        List<StoryResultBean.DataBean> storyBeanList = storyResultBean.getElements();
+                        List<RelaxResultBean.DataBean> relaxBeanList = relaxResultBean.getHot_spot_list();
 
 
-                        storyRecyclerItemModals = new ArrayList<>();
-                        for(StoryResultBean.DataBean dataBean : storyBeanList){
-                            List<StoryResultBean.StoryBean> realData = dataBean.getData();
-                            for(StoryResultBean.StoryBean storyBean: realData){
-                                StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(storyBean.getName(),storyBean.getCover_image_default(),storyBean.getUser().getName(),storyBean.getUser().getAvatar_l());
-                                storyRecyclerItemModals.add(newModal);
-                            }
-
+                        relaxRecyclerItemModals = new ArrayList<>();
+                        for(RelaxResultBean.DataBean dataBean : relaxBeanList){
+                                StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(dataBean.getText(),dataBean.getIndex_cover(),dataBean.getUser().getName(),dataBean.getUser().getAvatar_l());
+                                relaxRecyclerItemModals.add(newModal);
                         }
 
                         //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
                         Message message = new Message();
-                        message.what = 1;
-                        message.obj = storyRecyclerItemModals;
+                        message.what = 2;
+                        message.obj = relaxRecyclerItemModals;
                         handler.sendMessage(message);
                     }
                 } catch (Exception e) {
@@ -200,11 +182,11 @@ public class StoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_story, container, false);
+        View view = inflater.inflate(R.layout.fragment_relax, container, false);
         View header = inflater.inflate(R.layout.banner_item, container, false);
         Banner banner = header.findViewById(R.id.story_banner);
         banner.setBannerStyle(BannerConfig. CIRCLE_INDICATOR_TITLE_INSIDE);
-        banner.setImageLoader( new MyLoader());
+        banner.setImageLoader( new RelaxFragment.MyLoader());
         banner.setBannerTitles(imageTitle);
         banner.setImages( imageURL);
         banner.setBannerAnimation(Transformer. DepthPage);
@@ -217,6 +199,7 @@ public class StoryFragment extends Fragment {
             public void OnBannerClick(int position) {
                 Intent webIntent = new Intent(getActivity(), WebActivity.class);
                 webIntent.putExtra("position",position);
+                webIntent.putExtra("fragment","relaxFragment");
                 startActivity(webIntent);
             }
         });
@@ -228,8 +211,7 @@ public class StoryFragment extends Fragment {
         boolean includeEdge = true;
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new StoryRecyclerAdapter(getContext(), storyRecyclerItemModals);
-        adapter.notifyDataSetChanged();
+        adapter = new StoryRecyclerAdapter(getContext(), relaxRecyclerItemModals);
         //设置headerview
         adapter.setHeaderView(banner);
         recyclerView.setAdapter(adapter);
@@ -245,7 +227,4 @@ public class StoryFragment extends Fragment {
             Glide. with(context).load((String) path).into(imageView);
         }
     }
-
-
-
 }

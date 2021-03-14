@@ -11,10 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.graduatetravell.BlankFragment;
 import com.example.graduatetravell.Mine.MineFragment;
 import com.example.graduatetravell.News.NewsFragment;
-import com.example.graduatetravell.R;
+import com.example.graduatetravell.Relax.RelaxFragment;
 import com.example.graduatetravell.Story.StoryFragment;
 
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         //init fragment
         mainFragments = new ArrayList<>(4);
         mainFragments.add(StoryFragment.newInstance("游记","1"));
-        mainFragments.add(StoryFragment.newInstance("热门","2"));
+        mainFragments.add(RelaxFragment.newInstance("热门","2"));
         mainFragments.add(NewsFragment.newInstance("新闻","3"));
         mainFragments.add(MineFragment.newInstance("我的","4"));
         //init ViewPager
