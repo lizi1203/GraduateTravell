@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +27,16 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.graduatetravell.LoginActivity;
 import com.example.graduatetravell.Manager.DataManager;
 import com.example.graduatetravell.Mine.MineListItemModal;
+import com.example.graduatetravell.News.NewsAdapter;
+import com.example.graduatetravell.News.NewsListItemModal;
+import com.example.graduatetravell.News.NewsResultBean;
 import com.example.graduatetravell.R;
 import com.example.graduatetravell.RegisterActivity;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.orhanobut.logger.Logger;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -34,8 +44,16 @@ import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
 
+import java.io.BufferedReader;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 
 import static android.content.ContentValues.TAG;
 
@@ -63,6 +81,8 @@ public class StoryFragment extends Fragment {
     private StoryRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<StoryRecyclerItemModal> storyRecyclerItemModals = new ArrayList<StoryRecyclerItemModal>();
+    Handler handler;
+
 
     public StoryFragment() {
         // Required empty public constructor
@@ -95,6 +115,21 @@ public class StoryFragment extends Fragment {
         }
         initBannerData();
         initRecyclerData();
+        handler = new Handler(){
+            public void handleMessage(Message msg)
+            {
+                if (msg.what == 1)
+                {
+                    storyRecyclerItemModals = (ArrayList<StoryRecyclerItemModal>) msg.obj;
+                    adapter.notifyDataSetChanged();
+                }
+                else
+                {
+
+                }
+            }
+
+        };
     }
 
     private void initBannerData() {
@@ -110,14 +145,55 @@ public class StoryFragment extends Fragment {
     }
 
     private void initRecyclerData() {
-        for (int i=0;i<10;i++){
-            StoryRecyclerItemModal item=new StoryRecyclerItemModal();
-            item.setItemTitle("Test "+i);
-            item.setItemAuthor("name");
-            item.setIconURL("https://pic.qyer.com/album/user/3904/2/QkBVRhoFaEo/index/680x400");
-            item.setItemHeadURL("https://dss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1200678983,2021774119&fm=11&gp=0.jpg");
-            storyRecyclerItemModals.add(item);
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpURLConnection connection = null;
+                BufferedReader reader = null;
+
+                try {
+                    OkHttpClient client = new OkHttpClient.Builder()
+                            .connectTimeout(5000, TimeUnit.MILLISECONDS)
+                            .readTimeout(5000, TimeUnit.MILLISECONDS)
+                            .build();//创建OkHttpClient对象
+                    Request request = new Request.Builder()
+                            .url("http://api.breadtrip.com/v2/index/?next_start=1")//请求接口。如果需要传参拼接到接口后面。
+                            .build();//创建Request 对象
+                    Response response = null;
+                    response = client.newCall(request).execute();//得到Response 对象
+                    if (response.isSuccessful()) {
+                        String responseData = response.body().string();
+                        //拿到数组
+                        JsonObject jsonObject = new JsonParser().parse(responseData).getAsJsonObject();
+                        JsonObject data = jsonObject.get("data").getAsJsonObject();
+
+
+                        StoryResultBean storyResultBean = new Gson().fromJson(data,StoryResultBean.class);
+                        //对象中拿到集合
+                        List<StoryResultBean.DataBean> storyBeanList = storyResultBean.getElements();
+
+
+                        storyRecyclerItemModals = new ArrayList<>();
+                        for(StoryResultBean.DataBean dataBean : storyBeanList){
+                            List<StoryResultBean.StoryBean> realData = dataBean.getData();
+                            for(StoryResultBean.StoryBean storyBean: realData){
+                                StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(storyBean.getName(),storyBean.getCover_image_default(),storyBean.getUser().getName(),storyBean.getUser().getAvatar_l());
+                                storyRecyclerItemModals.add(newModal);
+                            }
+
+                        }
+
+                        //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
+                        Message message = new Message();
+                        message.what = 1;
+                        message.obj = storyRecyclerItemModals;
+                        handler.sendMessage(message);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
     }
 
