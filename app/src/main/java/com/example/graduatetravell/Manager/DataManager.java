@@ -64,17 +64,17 @@ public class DataManager {
         NewsResultBean resultBean = new Gson().fromJson(responseData,NewsResultBean.class);
         //对象中拿到集合
         List<NewsResultBean.StoryBean> storyBeanList = resultBean.getStories();
-        List<NewsResultBean.StoryBeanT> storyBeanTList = resultBean.getTop_stories();
+//        List<NewsResultBean.StoryBeanT> storyBeanTList = resultBean.getTop_stories();
         newsListItemModalArrayList = new ArrayList<>();
         for(NewsResultBean.StoryBean storyBean : storyBeanList){
             NewsListItemModal newModal = new NewsListItemModal(storyBean.getTitle(),storyBean.getHint(),storyBean.getImages().get(0),storyBean.getUrl());
             newsListItemModalArrayList.add(newModal);
         }
 
-        for(NewsResultBean.StoryBeanT storyBeanT : storyBeanTList){
-            NewsListItemModal newModal = new NewsListItemModal(storyBeanT.getTitle(),storyBeanT.getHint(),storyBeanT.getImage(),storyBeanT.getUrl());
-            newsListItemModalArrayList.add(newModal);
-        }
+//        for(NewsResultBean.StoryBeanT storyBeanT : storyBeanTList){
+//            NewsListItemModal newModal = new NewsListItemModal(storyBeanT.getTitle(),storyBeanT.getHint(),storyBeanT.getImage(),storyBeanT.getUrl());
+//            newsListItemModalArrayList.add(newModal);
+//        }
     }
 
     public void NewsDataManager(String apiUrl){

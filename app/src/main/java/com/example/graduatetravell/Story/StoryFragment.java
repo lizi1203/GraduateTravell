@@ -79,9 +79,10 @@ public class StoryFragment extends Fragment {
 
     //recyclerView部分数据
     private RecyclerView recyclerView;
+    private ArrayList<StoryRecyclerItemModal> storyRecyclerItemModals = new ArrayList<StoryRecyclerItemModal>();
     private StoryRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<StoryRecyclerItemModal> storyRecyclerItemModals = new ArrayList<StoryRecyclerItemModal>();
+
     Handler handler;
 
 
@@ -121,12 +122,8 @@ public class StoryFragment extends Fragment {
             {
                 if (msg.what == 1)
                 {
-                    storyRecyclerItemModals = (ArrayList<StoryRecyclerItemModal>) msg.obj;
-                    adapter = new StoryRecyclerAdapter(getContext(), storyRecyclerItemModals);
-                    //设置headerview
-                    adapter.setHeaderView(banner);
+                    storyRecyclerItemModals.addAll((ArrayList< StoryRecyclerItemModal>) msg.obj);
                     adapter.notifyDataSetChanged();
-                    recyclerView.setAdapter(adapter);
                 }
                 else
                 {
@@ -178,12 +175,12 @@ public class StoryFragment extends Fragment {
                         List<StoryResultBean.DataBean> storyBeanList = storyResultBean.getElements();
 
 
-                        storyRecyclerItemModals = new ArrayList<>();
+                        ArrayList<StoryRecyclerItemModal> tempItemModals = new ArrayList<>();
                         for(StoryResultBean.DataBean dataBean : storyBeanList){
                             List<StoryResultBean.StoryBean> realData = dataBean.getData();
                             for(StoryResultBean.StoryBean storyBean: realData){
                                 StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(storyBean.getName(),storyBean.getCover_image_default(),storyBean.getUser().getName(),storyBean.getUser().getAvatar_l());
-                                storyRecyclerItemModals.add(newModal);
+                                tempItemModals.add(newModal);
                             }
 
                         }
@@ -191,7 +188,7 @@ public class StoryFragment extends Fragment {
                         //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
                         Message message = new Message();
                         message.what = 1;
-                        message.obj = storyRecyclerItemModals;
+                        message.obj = tempItemModals;
                         handler.sendMessage(message);
                     }
                 } catch (Exception e) {

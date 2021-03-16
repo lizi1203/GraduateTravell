@@ -5,11 +5,26 @@
     android:layout_height="match_parent"
     tools:context=".News.NewsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/news_recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"/>
+   <com.scwang.smart.refresh.layout.SmartRefreshLayout
+       android:id="@+id/news_refreshlayout"
+       android:layout_width="match_parent"
+       android:layout_height="685dp">
+
+       <!-- TODO: Update blank fragment layout -->
+       <androidx.recyclerview.widget.RecyclerView
+           android:id="@+id/news_recyclerView"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:clickable="true"/>
+
+       <com.scwang.smart.refresh.footer.BallPulseFooter
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"/>
+
+
+   </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+
+
 
 </FrameLayout>

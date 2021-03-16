@@ -107,12 +107,8 @@ public class RelaxFragment extends Fragment {
             {
                 if (msg.what == 2)
                 {
-                    relaxRecyclerItemModals = (ArrayList<StoryRecyclerItemModal>) msg.obj;
-                    adapter = new StoryRecyclerAdapter(getContext(), relaxRecyclerItemModals);
-                    //设置headerview
-                    adapter.setHeaderView(banner);
+                    relaxRecyclerItemModals.addAll((ArrayList<StoryRecyclerItemModal>) msg.obj);
                     adapter.notifyDataSetChanged();
-                    recyclerView.setAdapter(adapter);
                 }
                 else
                 {
@@ -164,16 +160,16 @@ public class RelaxFragment extends Fragment {
                         List<RelaxResultBean.DataBean> relaxBeanList = relaxResultBean.getHot_spot_list();
 
 
-                        relaxRecyclerItemModals = new ArrayList<>();
+                        ArrayList<StoryRecyclerItemModal> tempItemModals = new ArrayList<>();
                         for(RelaxResultBean.DataBean dataBean : relaxBeanList){
                                 StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(dataBean.getText(),dataBean.getIndex_cover(),dataBean.getUser().getName(),dataBean.getUser().getAvatar_l());
-                                relaxRecyclerItemModals.add(newModal);
+                            tempItemModals.add(newModal);
                         }
 
                         //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
                         Message message = new Message();
                         message.what = 2;
-                        message.obj = relaxRecyclerItemModals;
+                        message.obj = tempItemModals;
                         handler.sendMessage(message);
                     }
                 } catch (Exception e) {

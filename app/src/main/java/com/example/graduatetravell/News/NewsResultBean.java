@@ -6,12 +6,12 @@ import java.util.List;
 public class NewsResultBean implements Serializable {
     private String date;
     private List<StoryBean> stories;
-    private List<StoryBeanT> top_stories;
+//    private List<StoryBeanT> top_stories;
 
-    public NewsResultBean(String date, List<StoryBean> stories, List<StoryBeanT> top_stories) {
+    public NewsResultBean(String date, List<StoryBean> stories) {
         this.date = date;
         this.stories = stories;
-        this.top_stories = top_stories;
+//        this.top_stories = top_stories;
     }
 
     public String getDate() {
@@ -30,13 +30,13 @@ public class NewsResultBean implements Serializable {
         this.stories = stories;
     }
 
-    public List<StoryBeanT> getTop_stories() {
-        return top_stories;
-    }
-
-    public void setTop_stories(List<StoryBeanT> top_stories) {
-        this.top_stories = top_stories;
-    }
+//    public List<StoryBeanT> getTop_stories() {
+//        return top_stories;
+//    }
+//
+//    public void setTop_stories(List<StoryBeanT> top_stories) {
+//        this.top_stories = top_stories;
+//    }
 
     public class StoryBean {
         private String title ;
@@ -61,26 +61,26 @@ public class NewsResultBean implements Serializable {
         }
     }
 
-    public class StoryBeanT{
-        private String title ;
-        private String url;
-        private String hint;
-        private String image;
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public String getHint() {
-            return hint;
-        }
-
-        public String getImage() {
-            return image;
-        }
-    }
+//    public class StoryBeanT{
+//        private String title ;
+//        private String url;
+//        private String hint;
+//        private String image;
+//
+//        public String getTitle() {
+//            return title;
+//        }
+//
+//        public String getUrl() {
+//            return url;
+//        }
+//
+//        public String getHint() {
+//            return hint;
+//        }
+//
+//        public String getImage() {
+//            return image;
+//        }
+//    }
 }
