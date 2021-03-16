@@ -59,6 +59,7 @@ public class RelaxFragment extends Fragment {
     private String mParam2;
 
     //banner部分数据
+    Banner banner;
     List<String> imageURL;
     List<String> imageTitle;
 
@@ -107,6 +108,11 @@ public class RelaxFragment extends Fragment {
                 if (msg.what == 2)
                 {
                     relaxRecyclerItemModals = (ArrayList<StoryRecyclerItemModal>) msg.obj;
+                    adapter = new StoryRecyclerAdapter(getContext(), relaxRecyclerItemModals);
+                    //设置headerview
+                    adapter.setHeaderView(banner);
+                    adapter.notifyDataSetChanged();
+                    recyclerView.setAdapter(adapter);
                 }
                 else
                 {
@@ -184,7 +190,7 @@ public class RelaxFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_relax, container, false);
         View header = inflater.inflate(R.layout.banner_item, container, false);
-        Banner banner = header.findViewById(R.id.story_banner);
+        banner = header.findViewById(R.id.story_banner);
         banner.setBannerStyle(BannerConfig. CIRCLE_INDICATOR_TITLE_INSIDE);
         banner.setImageLoader( new RelaxFragment.MyLoader());
         banner.setBannerTitles(imageTitle);
@@ -214,8 +220,8 @@ public class RelaxFragment extends Fragment {
         adapter = new StoryRecyclerAdapter(getContext(), relaxRecyclerItemModals);
         //设置headerview
         adapter.setHeaderView(banner);
+        adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
-
 
 
         return view;

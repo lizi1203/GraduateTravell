@@ -90,6 +90,7 @@ public class NewsFragment extends Fragment {
                     newsListItemModalArrayList = (ArrayList<NewsListItemModal>) msg.obj;
                     adapter = new NewsAdapter(getContext(),newsListItemModalArrayList);
                     adapter.notifyDataSetChanged();
+                    recyclerView.setAdapter(adapter);
                 }
                 else
                 {
@@ -158,7 +159,6 @@ public class NewsFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.news_recyclerView);
         layoutManager = new LinearLayoutManager(getContext());
-
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));

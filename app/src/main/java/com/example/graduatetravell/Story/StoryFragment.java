@@ -73,6 +73,7 @@ public class StoryFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     //banner部分数据
+    Banner banner;
     List<String> imageURL;
     List<String> imageTitle;
 
@@ -121,6 +122,11 @@ public class StoryFragment extends Fragment {
                 if (msg.what == 1)
                 {
                     storyRecyclerItemModals = (ArrayList<StoryRecyclerItemModal>) msg.obj;
+                    adapter = new StoryRecyclerAdapter(getContext(), storyRecyclerItemModals);
+                    //设置headerview
+                    adapter.setHeaderView(banner);
+                    adapter.notifyDataSetChanged();
+                    recyclerView.setAdapter(adapter);
                 }
                 else
                 {
@@ -202,7 +208,7 @@ public class StoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_story, container, false);
         View header = inflater.inflate(R.layout.banner_item, container, false);
-        Banner banner = header.findViewById(R.id.story_banner);
+        banner = header.findViewById(R.id.story_banner);
         banner.setBannerStyle(BannerConfig. CIRCLE_INDICATOR_TITLE_INSIDE);
         banner.setImageLoader( new MyLoader());
         banner.setBannerTitles(imageTitle);
@@ -229,12 +235,10 @@ public class StoryFragment extends Fragment {
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
         recyclerView.setLayoutManager(layoutManager);
         adapter = new StoryRecyclerAdapter(getContext(), storyRecyclerItemModals);
-        adapter.notifyDataSetChanged();
         //设置headerview
         adapter.setHeaderView(banner);
+        adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
-
-
 
         return view;
     }
