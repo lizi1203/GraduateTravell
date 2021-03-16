@@ -26,6 +26,9 @@ import com.example.graduatetravell.Story.WebActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.scwang.smart.refresh.footer.BallPulseFooter;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -70,6 +73,11 @@ public class RelaxFragment extends Fragment {
     private ArrayList<StoryRecyclerItemModal> relaxRecyclerItemModals = new ArrayList<StoryRecyclerItemModal>();
     Handler handler;
 
+    //上拉加载模块
+    RefreshLayout refreshLayout;
+    //控制加载数据的url
+    private int loadStart;
+
     public RelaxFragment() {
         // Required empty public constructor
     }
@@ -99,9 +107,9 @@ public class RelaxFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+        loadStart = 0;
         initBannerData();
-        initRecyclerData();
+        initRecyclerData(0);
         handler = new Handler(){
             public void handleMessage(Message msg)
             {
@@ -131,12 +139,11 @@ public class RelaxFragment extends Fragment {
         imageTitle.add("【一休妈】川西南行纪，没错，就是丁真的家乡");
     }
 
-    private void initRecyclerData() {
+    private void initRecyclerData(int loadStart) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                HttpURLConnection connection = null;
-                BufferedReader reader = null;
+                String url = "http://api.breadtrip.com/v2/new_trip/spot/hot/list/?start="+loadStart;
 
                 try {
                     OkHttpClient client = new OkHttpClient.Builder()
@@ -144,7 +151,7 @@ public class RelaxFragment extends Fragment {
                             .readTimeout(5000, TimeUnit.MILLISECONDS)
                             .build();//创建OkHttpClient对象
                     Request request = new Request.Builder()
-                            .url("http://api.breadtrip.com/v2/new_trip/spot/hot/list/?start=%d")//请求接口。如果需要传参拼接到接口后面。
+                            .url(url)//请求接口。如果需要传参拼接到接口后面。
                             .build();//创建Request 对象
                     Response response = null;
                     response = client.newCall(request).execute();//得到Response 对象
@@ -219,6 +226,23 @@ public class RelaxFragment extends Fragment {
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
 
+        //加载模块
+        refreshLayout = view.findViewById(R.id.relax_refreshlayout);
+        BallPulseFooter footer = new BallPulseFooter(getContext());
+        footer.setAnimatingColor(getResources().getColor(R.color.white));
+        refreshLayout.setRefreshFooter(footer);
+
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshlayout) {
+                loadStart +=12;
+                initRecyclerData(loadStart);
+                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
+            }
+        });
+        refreshLayout.setEnableRefresh(false);//是否启用下拉刷新功能
+        refreshLayout.setReboundDuration(300);//回弹动画时长（毫秒）
+        refreshLayout.setDisableContentWhenLoading(true);//是否在加载的时候禁止列表的操作
 
         return view;
     }

@@ -37,6 +37,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.orhanobut.logger.Logger;
+import com.scwang.smart.refresh.footer.BallPulseFooter;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -85,6 +88,10 @@ public class StoryFragment extends Fragment {
 
     Handler handler;
 
+    //上拉加载模块
+    RefreshLayout refreshLayout;
+    //控制加载数据的url
+    long loadStart;
 
     public StoryFragment() {
         // Required empty public constructor
@@ -115,8 +122,9 @@ public class StoryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        loadStart = 1;
         initBannerData();
-        initRecyclerData();
+        initRecyclerData(loadStart);
         handler = new Handler(){
             public void handleMessage(Message msg)
             {
@@ -146,12 +154,11 @@ public class StoryFragment extends Fragment {
         imageTitle.add("巴厘岛 | 总有一个假日，要属于bali");
     }
 
-    private void initRecyclerData() {
+    private void initRecyclerData(long nextStart) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                HttpURLConnection connection = null;
-                BufferedReader reader = null;
+                String url = "http://api.breadtrip.com/v2/index/?next_start="+ nextStart;
 
                 try {
                     OkHttpClient client = new OkHttpClient.Builder()
@@ -159,7 +166,7 @@ public class StoryFragment extends Fragment {
                             .readTimeout(5000, TimeUnit.MILLISECONDS)
                             .build();//创建OkHttpClient对象
                     Request request = new Request.Builder()
-                            .url("http://api.breadtrip.com/v2/index/?next_start=1")//请求接口。如果需要传参拼接到接口后面。
+                            .url(url)//请求接口。如果需要传参拼接到接口后面。
                             .build();//创建Request 对象
                     Response response = null;
                     response = client.newCall(request).execute();//得到Response 对象
@@ -173,7 +180,7 @@ public class StoryFragment extends Fragment {
                         StoryResultBean storyResultBean = new Gson().fromJson(data,StoryResultBean.class);
                         //对象中拿到集合
                         List<StoryResultBean.DataBean> storyBeanList = storyResultBean.getElements();
-
+                        loadStart = storyResultBean.getNext_start();
 
                         ArrayList<StoryRecyclerItemModal> tempItemModals = new ArrayList<>();
                         for(StoryResultBean.DataBean dataBean : storyBeanList){
@@ -236,6 +243,23 @@ public class StoryFragment extends Fragment {
         adapter.setHeaderView(banner);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
+
+        //加载模块
+        refreshLayout = view.findViewById(R.id.story_refreshlayout);
+        BallPulseFooter footer = new BallPulseFooter(getContext());
+        footer.setAnimatingColor(getResources().getColor(R.color.white));
+        refreshLayout.setRefreshFooter(footer);
+
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshlayout) {
+                initRecyclerData(loadStart);
+                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
+            }
+        });
+        refreshLayout.setEnableRefresh(false);//是否启用下拉刷新功能
+        refreshLayout.setReboundDuration(300);//回弹动画时长（毫秒）
+        refreshLayout.setDisableContentWhenLoading(true);//是否在加载的时候禁止列表的操作
 
         return view;
     }
