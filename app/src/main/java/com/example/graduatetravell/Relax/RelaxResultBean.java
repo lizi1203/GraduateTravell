@@ -20,6 +20,7 @@ public class RelaxResultBean {
         private String text;
         private String index_cover;
         private UserBean user;
+        private String spot_id;
 
         public String getText() {
             return text;
@@ -43,6 +44,14 @@ public class RelaxResultBean {
 
         public void setUser(UserBean user) {
             this.user = user;
+        }
+
+        public String getSpot_id() {
+            return spot_id;
+        }
+
+        public void setSpot_id(String spot_id) {
+            this.spot_id = spot_id;
         }
     }
 

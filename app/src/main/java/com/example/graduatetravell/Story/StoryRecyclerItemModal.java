@@ -10,16 +10,20 @@ public class StoryRecyclerItemModal {
     private String itemAuthor;
     //item的头像
     private String itemHeadURL;
+    //详情页数据的序列号
+    private String detailID;
 
-    public StoryRecyclerItemModal(String itemTitle, String iconURL, String itemAuthor, String itemHead) {
-        this.itemTitle = itemTitle;
-        this.iconURL = iconURL;
-        this.itemAuthor = itemAuthor;
-        this.itemHeadURL = itemHead;
-    }
 
     public StoryRecyclerItemModal() {
 
+    }
+
+    public StoryRecyclerItemModal(String itemTitle, String iconURL, String itemAuthor, String itemHeadURL, String detailID) {
+        this.itemTitle = itemTitle;
+        this.iconURL = iconURL;
+        this.itemAuthor = itemAuthor;
+        this.itemHeadURL = itemHeadURL;
+        this.detailID = detailID;
     }
 
 
@@ -53,5 +57,13 @@ public class StoryRecyclerItemModal {
 
     public void setItemHeadURL(String itemHead) {
         this.itemHeadURL = itemHead;
+    }
+
+    public String getDetailID() {
+        return detailID;
+    }
+
+    public void setDetailID(String detailID) {
+        this.detailID = detailID;
     }
 }

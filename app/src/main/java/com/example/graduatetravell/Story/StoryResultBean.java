@@ -49,6 +49,7 @@ public class StoryResultBean {
         private String name;
         private UserBean user;
         private String cover_image_default;
+        private String id;
 
         public String getName() {
             return name;
@@ -72,6 +73,14 @@ public class StoryResultBean {
 
         public void setCover_image_default(String cover_image_default) {
             this.cover_image_default = cover_image_default;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
         }
     }
 

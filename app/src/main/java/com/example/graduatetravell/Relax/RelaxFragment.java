@@ -68,7 +68,7 @@ public class RelaxFragment extends Fragment {
 
     //recyclerView部分数据
     private RecyclerView recyclerView;
-    private StoryRecyclerAdapter adapter;
+    private RelaxRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<StoryRecyclerItemModal> relaxRecyclerItemModals = new ArrayList<StoryRecyclerItemModal>();
     Handler handler;
@@ -169,7 +169,7 @@ public class RelaxFragment extends Fragment {
 
                         ArrayList<StoryRecyclerItemModal> tempItemModals = new ArrayList<>();
                         for(RelaxResultBean.DataBean dataBean : relaxBeanList){
-                                StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(dataBean.getText(),dataBean.getIndex_cover(),dataBean.getUser().getName(),dataBean.getUser().getAvatar_l());
+                                StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(dataBean.getText(),dataBean.getIndex_cover(),dataBean.getUser().getName(),dataBean.getUser().getAvatar_l(),dataBean.getSpot_id());
                             tempItemModals.add(newModal);
                         }
 
@@ -220,7 +220,7 @@ public class RelaxFragment extends Fragment {
         boolean includeEdge = true;
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new StoryRecyclerAdapter(getContext(), relaxRecyclerItemModals);
+        adapter = new RelaxRecyclerAdapter(getContext(), relaxRecyclerItemModals);
         //设置headerview
         adapter.setHeaderView(banner);
         adapter.notifyDataSetChanged();

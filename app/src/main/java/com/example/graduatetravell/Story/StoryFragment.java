@@ -186,7 +186,7 @@ public class StoryFragment extends Fragment {
                         for(StoryResultBean.DataBean dataBean : storyBeanList){
                             List<StoryResultBean.StoryBean> realData = dataBean.getData();
                             for(StoryResultBean.StoryBean storyBean: realData){
-                                StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(storyBean.getName(),storyBean.getCover_image_default(),storyBean.getUser().getName(),storyBean.getUser().getAvatar_l());
+                                StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(storyBean.getName(),storyBean.getCover_image_default(),storyBean.getUser().getName(),storyBean.getUser().getAvatar_l(),storyBean.getId());
                                 tempItemModals.add(newModal);
                             }
 

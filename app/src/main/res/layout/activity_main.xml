@@ -37,9 +37,9 @@
             android:layout_weight="0.25"
             android:button="@null"
             android:checked="true"
-            android:drawableTop="@drawable/notes_tab_image_selector"
+            android:drawableTop="@drawable/hot_tab_image_selector"
             android:gravity="center_horizontal"
-            android:text="游记"
+            android:text="热门"
             android:textColor="@drawable/radiobutton_color_selector"
             android:textSize="18dp" />
 
@@ -49,9 +49,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.25"
             android:button="@null"
-            android:drawableTop="@drawable/hot_tab_image_selector"
+            android:drawableTop="@drawable/notes_tab_image_selector"
             android:gravity="center_horizontal"
-            android:text="热门"
+            android:text="休闲"
             android:textColor="@drawable/radiobutton_color_selector"
             android:textSize="18dp" />
 

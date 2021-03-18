@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         mainTabRadioGroup = findViewById(R.id.mainTabs_radioGroup);
         //init fragment
         mainFragments = new ArrayList<>(4);
-        mainFragments.add(StoryFragment.newInstance("游记","1"));
-        mainFragments.add(RelaxFragment.newInstance("热门","2"));
+        mainFragments.add(StoryFragment.newInstance("热门","1"));
+        mainFragments.add(RelaxFragment.newInstance("休闲","2"));
         mainFragments.add(NewsFragment.newInstance("新闻","3"));
         mainFragments.add(MineFragment.newInstance("我的","4"));
         //init ViewPager

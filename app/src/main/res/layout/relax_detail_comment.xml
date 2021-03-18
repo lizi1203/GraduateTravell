@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+
+    <com.example.graduatetravell.Mine.CircleImageView
+        android:id="@+id/relax_detail_comment_head"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/relax_detail_comment_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/relax_detail_comment_head"
+        android:text="comment"
+        android:textSize="20dp"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/relax_detail_comment_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/relax_detail_comment_name"
+        android:layout_toRightOf="@id/relax_detail_comment_head"
+        android:text="2021.03.17"
+        android:textColor="@color/white"/>
+
+
+</RelativeLayout>
