@@ -15,6 +15,9 @@ import com.example.graduatetravell.Mine.MineAdapter;
 import com.example.graduatetravell.Mine.MineListItemModal;
 import com.example.graduatetravell.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class RelaxDetailAdapter extends ArrayAdapter<RelaxDetailHeadItemModal> {
@@ -35,10 +38,12 @@ public class RelaxDetailAdapter extends ArrayAdapter<RelaxDetailHeadItemModal> {
         View viewItem1 = null;
         View viewItem2 = null;
         View viewItem3 = null;
+        View viewItem4 = null;
 
         RelaxDetailAdapter.ViewHolderHead viewHolderHead = null;
         RelaxDetailAdapter.ViewHolderBase viewHolderBase = null;
         RelaxDetailAdapter.ViewHolderComment viewHolderComment = null;
+        RelaxDetailAdapter.ViewHolderCommentHead viewHolderCommentHead = null;
         int viewType =getItemViewType(position);
 
         if(convertView == null){
@@ -71,6 +76,13 @@ public class RelaxDetailAdapter extends ArrayAdapter<RelaxDetailHeadItemModal> {
                     viewItem3.setTag(viewHolderComment);//保存
                     convertView = viewItem3;
                     break;
+                case 3:
+                    viewHolderCommentHead = new RelaxDetailAdapter.ViewHolderCommentHead();
+                    viewItem4 = inflater.inflate(R.layout.relax_detail_comment_head_layout, parent,false);
+                    viewHolderCommentHead.countText = viewItem4.findViewById(R.id.relax_detail_comment_head_count);
+                    viewItem4.setTag(viewHolderCommentHead);//保存
+                    convertView = viewItem4;
+                    break;
             }
 
         }
@@ -85,6 +97,9 @@ public class RelaxDetailAdapter extends ArrayAdapter<RelaxDetailHeadItemModal> {
                     break;
                 case 2:
                     viewHolderComment = ( RelaxDetailAdapter.ViewHolderComment) convertView.getTag();//取出
+                    break;
+                case 3:
+                    viewHolderCommentHead = ( RelaxDetailAdapter.ViewHolderCommentHead) convertView.getTag();//取出
             }
 
         }
@@ -104,7 +119,11 @@ public class RelaxDetailAdapter extends ArrayAdapter<RelaxDetailHeadItemModal> {
             case 2:
                 Glide.with(getContext()).load(relaxDetailHeadItemModal.getImageUrl()).into(viewHolderComment.commentImage);
                 viewHolderComment.commentText.setText(relaxDetailHeadItemModal.getText());
-                viewHolderComment.dateText.setText(relaxDetailHeadItemModal.getTitleString());
+                String dateText = stampToDate(relaxDetailHeadItemModal.getTitleString());
+                viewHolderComment.dateText.setText(dateText);
+                break;
+            case 3:
+                viewHolderCommentHead.countText.setText(relaxDetailHeadItemModal.getText()+"评论");
                 break;
         }
         return convertView;
@@ -132,6 +151,11 @@ public class RelaxDetailAdapter extends ArrayAdapter<RelaxDetailHeadItemModal> {
         TextView dateText;
     }
 
+    private class ViewHolderCommentHead{
+        public static final int TYPE_COMMENT = 3;
+        TextView countText;
+    }
+
     @Override
     public int getItemViewType(int position){
         return this.getItem(position).getItem_type();
@@ -139,7 +163,7 @@ public class RelaxDetailAdapter extends ArrayAdapter<RelaxDetailHeadItemModal> {
 
 
     public class ItemType {
-        public static final int ITEM_TYPE_MAX_COUNT = 3;
+        public static final int ITEM_TYPE_MAX_COUNT = 4;
     }
 
     public int getViewTypeCount() {
@@ -147,9 +171,21 @@ public class RelaxDetailAdapter extends ArrayAdapter<RelaxDetailHeadItemModal> {
     }
 
     //设置不可点击
+
     @Override
-    public boolean areAllItemsEnabled() {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean isEnabled(int position) {
+            return false;
     }
+
+
+    //时间戳转换为date方法
+    public static String stampToDate(String stap){
+        String time = stap.substring(0, stap.indexOf("."));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd ");
+        long lt = new Long(time);
+        Date date = new Date(lt*1000);
+        time = simpleDateFormat.format(date);
+        return time;
+    }
+
 }

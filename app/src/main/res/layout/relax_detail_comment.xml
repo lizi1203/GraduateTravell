@@ -19,7 +19,7 @@
         android:layout_marginLeft="20dp"
         android:layout_toRightOf="@+id/relax_detail_comment_head"
         android:text="comment"
-        android:textSize="20dp"
+        android:textSize="18dp"
         android:textColor="@color/white"/>
 
     <TextView

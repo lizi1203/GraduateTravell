@@ -116,9 +116,11 @@ public class RelaxDetailActivity extends AppCompatActivity {
                             newModal = new RelaxDetailHeadItemModal(detailBean.getText(),detailBean.getPhoto(),1,null,null);
                             tempItemModals.add(newModal);
                         }
-
+                        //插入评论区头部
+                        tempItemModals.add(new RelaxDetailHeadItemModal(String.valueOf(relaxSpotBean.getComments().size()),null,3,null,null));
                         for(RelaxDetailBean.CommentBean commentBean : relaxSpotBean.getComments()){
-                            newModal = new RelaxDetailHeadItemModal(commentBean.getComment(),commentBean.getUser().getAvatar_l(),2,commentBean.getDate_added(),null);
+                            String comment = commentBean.getUser().getName()+" : "+commentBean.getComment();
+                            newModal = new RelaxDetailHeadItemModal(comment,commentBean.getUser().getAvatar_l(),2,commentBean.getDate_added(),null);
                             tempItemModals.add(newModal);
                         }
 
