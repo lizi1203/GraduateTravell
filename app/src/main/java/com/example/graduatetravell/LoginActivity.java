@@ -74,6 +74,7 @@ public class LoginActivity extends Activity {
 //                                    String responseData = response.body().string();
 //                                    if (responseData.equals("login successfully!\r\n")) {
                                         Intent intentToMain = new Intent(LoginActivity.this, MainActivity.class);
+                                        intentToMain.putExtra("userName",username);
                                         startActivity(intentToMain);
 //                                    }else
 //                                    {

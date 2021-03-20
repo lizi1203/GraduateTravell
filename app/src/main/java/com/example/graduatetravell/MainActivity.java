@@ -1,6 +1,7 @@
 package com.example.graduatetravell;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager mainViewPager;
     private RadioGroup mainTabRadioGroup;
+    private String username;
 
     private List<Fragment> mainFragments;
     private FragmentPagerAdapter mainAdapter;
@@ -35,18 +37,22 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
         initView();
+
+
     }
 
     private void initView() {
         //find view
         mainViewPager = findViewById(R.id.main_viewPage);
         mainTabRadioGroup = findViewById(R.id.mainTabs_radioGroup);
+        Intent intentToMain = getIntent();
+        username = intentToMain.getStringExtra("userName");
         //init fragment
         mainFragments = new ArrayList<>(4);
         mainFragments.add(StoryFragment.newInstance("热门","1"));
         mainFragments.add(RelaxFragment.newInstance("休闲","2"));
         mainFragments.add(NewsFragment.newInstance("新闻","3"));
-        mainFragments.add(MineFragment.newInstance("我的","4"));
+        mainFragments.add(MineFragment.newInstance("我的",username));
         //init ViewPager
         mainAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),4) {
             @NonNull

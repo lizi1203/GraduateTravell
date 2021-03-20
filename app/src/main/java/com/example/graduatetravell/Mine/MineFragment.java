@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.graduatetravell.LoginActivity;
 import com.example.graduatetravell.R;
@@ -85,7 +86,7 @@ public class MineFragment extends Fragment {
     }
 
     private void initData() {
-        mineListItemModals.add(new MineListItemModal("UserName",R.drawable.head,0));
+        mineListItemModals.add(new MineListItemModal(mParam2,R.drawable.head,0));
         mineListItemModals.add(new MineListItemModal("游记",R.drawable.mystory,1));
         mineListItemModals.add(new MineListItemModal("热门",R.drawable.myhot,1));
         mineListItemModals.add(new MineListItemModal("新闻",R.drawable.mynews,1));
