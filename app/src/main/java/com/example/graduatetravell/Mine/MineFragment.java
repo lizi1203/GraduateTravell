@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -78,6 +79,24 @@ public class MineFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_mine, container, false);
         mineListView = view.findViewById(R.id.minelist);
+        mineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 1:
+                        Intent intentToStoryHistory = new Intent(getContext(),StoryHistoryActivity.class);
+                        startActivity(intentToStoryHistory);
+                        break;
+                    case 2:
+//                        Toast.makeText(MainActivity.this,"第"+position+"个item", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3:
+//                        Toast.makeText(MainActivity.this,"第"+position+"个item", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+
 
         MineAdapter adapter = new MineAdapter(
                 getContext() , R.layout.fragment_mine_base_item, mineListItemModals);

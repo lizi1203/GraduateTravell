@@ -236,7 +236,7 @@ public class StoryFragment extends Fragment {
         int spanCount = 2; // 3 columns
         int spacing = 50; // 50px
         boolean includeEdge = true;
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge,false));
         recyclerView.setLayoutManager(layoutManager);
         adapter = new StoryRecyclerAdapter(getContext(), storyRecyclerItemModals);
         //设置headerview

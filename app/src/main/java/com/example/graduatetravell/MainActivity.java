@@ -12,11 +12,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.graduatetravell.Manager.UserNameApplication;
 import com.example.graduatetravell.Mine.MineFragment;
 import com.example.graduatetravell.News.NewsFragment;
 import com.example.graduatetravell.Relax.RelaxFragment;
 import com.example.graduatetravell.Story.StoryFragment;
+import com.orhanobut.logger.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager mainViewPager;
     private RadioGroup mainTabRadioGroup;
-    private String username;
+    public String username;
 
     private List<Fragment> mainFragments;
     private FragmentPagerAdapter mainAdapter;
@@ -37,8 +40,15 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
         initView();
+        createNewFile();
+    }
 
-
+    private void createNewFile() {
+        String path = getFilesDir().getAbsolutePath() ;
+        File file = new File(path + "/" + username) ;
+        if(!file.exists()){
+            file.mkdirs() ;
+        }
     }
 
     private void initView() {
@@ -47,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         mainTabRadioGroup = findViewById(R.id.mainTabs_radioGroup);
         Intent intentToMain = getIntent();
         username = intentToMain.getStringExtra("userName");
+        UserNameApplication app = (UserNameApplication) getApplication(); //获得我们的应用程序MyApplication
+        app.setUserName(username);
         //init fragment
         mainFragments = new ArrayList<>(4);
         mainFragments.add(StoryFragment.newInstance("热门","1"));
@@ -108,4 +120,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    public String getUsername() {
+        return username;
+    }
 }

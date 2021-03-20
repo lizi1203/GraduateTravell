@@ -1,6 +1,8 @@
 package com.example.graduatetravell.Story;
 
-public class StoryRecyclerItemModal {
+import java.io.Serializable;
+
+public class StoryRecyclerItemModal implements Serializable {
 
     //item的标题
     private String itemTitle;
@@ -65,5 +67,27 @@ public class StoryRecyclerItemModal {
 
     public void setDetailID(String detailID) {
         this.detailID = detailID;
+    }
+
+    //重写equals方法
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        StoryRecyclerItemModal other = (StoryRecyclerItemModal) obj;
+        if (!itemTitle.equals( other.itemTitle))
+            return false;
+        if (!iconURL.equals( other.iconURL))
+            return false;
+        if (!itemAuthor.equals( other.itemAuthor))
+            return false;
+        if (!itemHeadURL.equals( other.itemHeadURL))
+            return false;
+        if (!detailID.equals( other.detailID))
+            return false;
+
+        return true;
     }
 }
