@@ -84,8 +84,10 @@ public class StoryRecyclerAdapter extends RecyclerView.Adapter<StoryRecyclerAdap
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Intent detailIntent = new Intent(context, RelaxDetailActivity.class);
-//                    context.startActivity(detailIntent);
+                    Intent detailIntent = new Intent(context, StoryDetailActivity.class);
+                    detailIntent.putExtra("detailID",data.getDetailID());
+                    detailIntent.putExtra("title",data.getItemTitle());
+                    context.startActivity(detailIntent);
                 }
             });
         }

@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GraduateTravell.newActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Relax.RelaxDetailActivity"></activity>
+        <activity android:name=".Story.StoryDetailActivity"></activity>
+        <activity android:name=".Relax.RelaxDetailActivity" />
         <activity android:name=".Story.WebActivity" />
         <activity android:name=".MainActivity" />
         <activity
