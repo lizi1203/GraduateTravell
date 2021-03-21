@@ -18,7 +18,7 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-public class StoryHistoryActivity extends AppCompatActivity {
+public class RelaxHistoryActivity extends AppCompatActivity {
 
     //recyclerView部分数据
     private RecyclerView recyclerView;
@@ -27,11 +27,10 @@ public class StoryHistoryActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private UserNameApplication app;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_story_history);
+        setContentView(R.layout.activity_relax_history);
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
@@ -42,7 +41,7 @@ public class StoryHistoryActivity extends AppCompatActivity {
         String path = getFilesDir().getAbsolutePath();
         app = (UserNameApplication) getApplicationContext(); //获取应用程序
         File file = new File(path + "/" + app.getUserName()) ;
-        File file2 = new File(file.getAbsoluteFile()  + "/StoryHistory.txt") ;
+        File file2 = new File(file.getAbsoluteFile()  + "/RelaxHistory.txt") ;
         ObjectInputStream objectInputStream = null;
         try {
             objectInputStream = new ObjectInputStream(new FileInputStream(file2));
@@ -54,19 +53,17 @@ public class StoryHistoryActivity extends AppCompatActivity {
         }
 
 
-        recyclerView = (RecyclerView)findViewById(R.id.story_history_recyclerView);
+        recyclerView = (RecyclerView)findViewById(R.id.relax_history_recyclerView);
         layoutManager = new GridLayoutManager(this,2);
         int spanCount = 2; // 3 columns
         int spacing = 50; // 50px
         boolean includeEdge = true;
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge,true));
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new HistoryRecyclerAdapter(this, storyRecyclerItemModals,"StoryHistory.txt");
+        adapter = new HistoryRecyclerAdapter(this, storyRecyclerItemModals,"RelaxHistory.txt");
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
-
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

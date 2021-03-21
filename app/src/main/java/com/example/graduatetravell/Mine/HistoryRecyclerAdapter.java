@@ -1,4 +1,4 @@
-package com.example.graduatetravell.Story;
+package com.example.graduatetravell.Mine;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.graduatetravell.Manager.UserNameApplication;
 import com.example.graduatetravell.R;
+import com.example.graduatetravell.Story.StoryDetailActivity;
+import com.example.graduatetravell.Story.StoryFragment;
+import com.example.graduatetravell.Story.StoryRecyclerItemModal;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -37,10 +39,13 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
     //用于重装历史数据
     private ArrayList<StoryRecyclerItemModal> revertRecyclerItemModalList = new ArrayList<StoryRecyclerItemModal>();;
 
-    public HistoryRecyclerAdapter(Context context, ArrayList<StoryRecyclerItemModal> storyRecyclerItemModalList) {
+    private String fileName ;
+
+    public HistoryRecyclerAdapter(Context context, ArrayList<StoryRecyclerItemModal> storyRecyclerItemModalList,String fileName) {
         //将传递过来的数据，赋值给本地变量
         this.context = context;//上下文
         this.storyRecyclerItemModalList = storyRecyclerItemModalList;//实体类数据ArrayList
+        this.fileName = fileName;
 
 
         String path = context.getFilesDir().getAbsolutePath() ;
@@ -49,7 +54,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
         if(!file.exists()){
             file.mkdirs() ;
         }
-        File file2 = new File(file.getAbsoluteFile()  + "/StoryHistory.txt") ;
+        File file2 = new File(file.getAbsoluteFile()  + "/" +fileName) ;
         //先读取原有的历史数据
         ObjectInputStream objectInputStream = null;
         try {
@@ -109,8 +114,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
         if(!file.exists()){
             file.mkdirs() ;
         }
-        File file2 = new File(file.getAbsoluteFile()  + "/StoryHistory.txt") ;
-
+        File file2 = new File(file.getAbsoluteFile()  + "/" +fileName) ;
         //先读取原有的历史数据
         ObjectInputStream objectInputStream = null;
         try {

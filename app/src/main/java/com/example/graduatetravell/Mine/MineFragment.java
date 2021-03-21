@@ -88,7 +88,8 @@ public class MineFragment extends Fragment {
                         startActivity(intentToStoryHistory);
                         break;
                     case 2:
-//                        Toast.makeText(MainActivity.this,"第"+position+"个item", Toast.LENGTH_SHORT).show();
+                        Intent intentToRelaxHistory = new Intent(getContext(),RelaxHistoryActivity.class);
+                        startActivity(intentToRelaxHistory);
                         break;
                     case 3:
 //                        Toast.makeText(MainActivity.this,"第"+position+"个item", Toast.LENGTH_SHORT).show();
@@ -106,9 +107,9 @@ public class MineFragment extends Fragment {
 
     private void initData() {
         mineListItemModals.add(new MineListItemModal(mParam2,R.drawable.head,0));
-        mineListItemModals.add(new MineListItemModal("游记",R.drawable.mystory,1));
-        mineListItemModals.add(new MineListItemModal("热门",R.drawable.myhot,1));
-        mineListItemModals.add(new MineListItemModal("新闻",R.drawable.mynews,1));
+        mineListItemModals.add(new MineListItemModal("热门浏览历史",R.drawable.mystory,1));
+        mineListItemModals.add(new MineListItemModal("休闲浏览历史",R.drawable.myhot,1));
+        mineListItemModals.add(new MineListItemModal("新闻浏览历史",R.drawable.mynews,1));
     }
 
     @Override

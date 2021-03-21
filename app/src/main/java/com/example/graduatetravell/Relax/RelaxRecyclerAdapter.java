@@ -12,11 +12,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.graduatetravell.Manager.UserNameApplication;
 import com.example.graduatetravell.R;
 import com.example.graduatetravell.Story.StoryFragment;
 import com.example.graduatetravell.Story.StoryRecyclerAdapter;
 import com.example.graduatetravell.Story.StoryRecyclerItemModal;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +41,12 @@ public class RelaxRecyclerAdapter extends RecyclerView.Adapter<RelaxRecyclerAdap
     public void setHeaderView(View headerView) {
         mHeaderView = headerView;
     }
+    private UserNameApplication app;
+
+    //用于存储读取的历史数据
+    private ArrayList<StoryRecyclerItemModal> tempRecyclerItemModalList = new ArrayList<StoryRecyclerItemModal>();;
+    //用于重装历史数据
+    private ArrayList<StoryRecyclerItemModal> revertRecyclerItemModalList = new ArrayList<StoryRecyclerItemModal>();;
 
     //根据pos返回不同的ItemViewType
     @Override
@@ -85,10 +99,53 @@ public class RelaxRecyclerAdapter extends RecyclerView.Adapter<RelaxRecyclerAdap
                 public void onClick(View v) {
                     Intent detailIntent = new Intent(context, RelaxDetailActivity.class);
                     detailIntent.putExtra("detailID",data.getDetailID());
+
+                    //将点击的Item数据写入文件
+                    whriteToFile(data);
                     context.startActivity(detailIntent);
                 }
             });
         }
+    }
+
+
+    private void whriteToFile(StoryRecyclerItemModal data) {
+        BufferedWriter writer ;
+        String path = context.getFilesDir().getAbsolutePath() ;
+        app = (UserNameApplication) context.getApplicationContext(); //获取应用程序
+        File file = new File(path + "/" + app.getUserName()) ;
+        if(!file.exists()){
+            file.mkdirs() ;
+        }
+        File file2 = new File(file.getAbsoluteFile()  + "/RelaxHistory.txt") ;
+        //先读取原有的历史数据
+        ObjectInputStream objectInputStream = null;
+        try {
+            objectInputStream = new ObjectInputStream(new FileInputStream(file2));
+            tempRecyclerItemModalList = (ArrayList<StoryRecyclerItemModal>) objectInputStream.readObject();
+            objectInputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //倒转历史数据
+        revertRecyclerItemModalList.add(data);
+        for(StoryRecyclerItemModal storyRecyclerItemModal:tempRecyclerItemModalList){
+            if(storyRecyclerItemModal.equals(data)) {
+
+            }else{
+                revertRecyclerItemModalList.add(storyRecyclerItemModal);
+            }
+        }
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file2));
+            objectOutputStream.writeObject(revertRecyclerItemModalList);
+            objectOutputStream.close() ;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
     private int getRealPosition(RecyclerView.ViewHolder holder) {
