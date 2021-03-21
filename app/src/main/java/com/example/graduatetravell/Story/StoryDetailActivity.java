@@ -3,12 +3,16 @@ package com.example.graduatetravell.Story;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.example.graduatetravell.R;
 import com.example.graduatetravell.Relax.RelaxDetailAdapter;
@@ -34,7 +38,11 @@ public class StoryDetailActivity extends AppCompatActivity {
     //recyclerView部分数据
     private ListView detailListView;
     private StoryDetailAdapter adapter;;
-    ArrayList<StoryDetailItemModal> storyDetailItemModals = new ArrayList<>();
+    private ArrayList<StoryDetailItemModal> storyDetailItemModals = new ArrayList<>();
+
+    //ProgressBar部分
+    private Dialog dialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +58,16 @@ public class StoryDetailActivity extends AppCompatActivity {
         Intent detailIntent = getIntent();
         detailID = detailIntent.getStringExtra("detailID");
         title = detailIntent.getStringExtra("title");
-        getDetailData(detailID);
+
 
         detailListView = findViewById(R.id.story_detail_listView);
         adapter = new StoryDetailAdapter(this,R.layout.story_detail_base,storyDetailItemModals);
         adapter.notifyDataSetChanged();
         detailListView.setAdapter(adapter);
 
+        dialog = new ProgressDialog(StoryDetailActivity.this,ProgressDialog.THEME_HOLO_DARK);
+
+        getDetailData(detailID);
         handler = new Handler(){
             public void handleMessage(Message msg)
             {
@@ -64,22 +75,23 @@ public class StoryDetailActivity extends AppCompatActivity {
                 {
                     storyDetailItemModals.addAll((ArrayList<StoryDetailItemModal>) msg.obj);
                     adapter.notifyDataSetChanged();
+                    dialog.dismiss();
                 }
                 else
                 {
-
                 }
             }
 
         };
     }
 
+
     private void getDetailData(String detailID) {
+        dialog.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 String url = "http://api.breadtrip.com/trips/"+detailID+"/waypoints/";
-
                 try {
                     OkHttpClient client = new OkHttpClient.Builder()
                             .connectTimeout(5000, TimeUnit.MILLISECONDS)
@@ -117,12 +129,14 @@ public class StoryDetailActivity extends AppCompatActivity {
                         message.what = 6;
                         message.obj = tempItemModals;
                         handler.sendMessage(message);
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }).start();
+
 
     }
 

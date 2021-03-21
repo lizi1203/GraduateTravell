@@ -10,5 +10,10 @@
     <ListView
         android:id="@+id/story_detail_listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="380dp"
+        tools:layout_editor_absoluteY="620dp" >
+
+    </ListView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
