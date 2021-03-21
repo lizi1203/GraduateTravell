@@ -3,7 +3,11 @@ package com.example.graduatetravell.News;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class NewsListItemModal {
+import com.example.graduatetravell.Story.StoryRecyclerItemModal;
+
+import java.io.Serializable;
+
+public class NewsListItemModal implements Serializable {
 
     //标题
     private String title;
@@ -57,5 +61,26 @@ public class NewsListItemModal {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    //重写equals方法
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        NewsListItemModal other = (NewsListItemModal) obj;
+        if (!title.equals(other.title))
+            return false;
+        if (!author.equals(other.author))
+            return false;
+        if (!newsImage.equals(other.newsImage))
+            return false;
+        if (!url.equals(other.url))
+            return false;
+
+
+        return true;
     }
 }

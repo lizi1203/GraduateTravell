@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GraduateTravell.newActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Mine.RelaxHistoryActivity"></activity>
+        <activity android:name=".Mine.NewsHistoryActivity"></activity>
+        <activity android:name=".Mine.RelaxHistoryActivity" />
         <activity android:name=".Mine.StoryHistoryActivity" />
         <activity android:name=".Story.StoryDetailActivity" />
         <activity android:name=".Relax.RelaxDetailActivity" />

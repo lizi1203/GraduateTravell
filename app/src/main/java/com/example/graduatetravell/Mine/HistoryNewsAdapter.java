@@ -1,6 +1,5 @@
-package com.example.graduatetravell.News;
+package com.example.graduatetravell.Mine;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,9 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.graduatetravell.MainActivity;
 import com.example.graduatetravell.Manager.UserNameApplication;
+import com.example.graduatetravell.News.NewsAdapter;
+import com.example.graduatetravell.News.NewsListItemModal;
 import com.example.graduatetravell.R;
+import com.example.graduatetravell.Story.StoryRecyclerItemModal;
 import com.example.graduatetravell.Story.WebActivity;
 
 import java.io.File;
@@ -26,10 +27,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
+public class HistoryNewsAdapter extends RecyclerView.Adapter<HistoryNewsAdapter.NewsHolder>{
 
     private Context context;
     private ArrayList<NewsListItemModal> newsListItemModalArrayList = new ArrayList<>();
+    private String fileName;
+
     private UserNameApplication app;
 
     //用于存储读取的历史数据
@@ -37,21 +40,21 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
     //用于重装历史数据
     private ArrayList<NewsListItemModal> revertRecyclerItemModalList = new ArrayList<NewsListItemModal>();
 
-
-    public NewsAdapter(Context context, ArrayList<NewsListItemModal> newsListItemModalArrayList) {
+    public HistoryNewsAdapter(Context context, ArrayList<NewsListItemModal> newsListItemModalArrayList , String filename) {
         this.context = context;
         this.newsListItemModalArrayList = newsListItemModalArrayList;
+        this.fileName = filename;
     }
 
     @NonNull
     @Override
-    public NewsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HistoryNewsAdapter.NewsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.fragment_news_item, parent, false);
-        return new NewsHolder(view);
+        return new HistoryNewsAdapter.NewsHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NewsHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HistoryNewsAdapter.NewsHolder holder, int position) {
         NewsListItemModal newsItem = newsListItemModalArrayList.get(position);
         holder.title.setText(newsItem.getTitle());
         holder.author.setText(newsItem.getAuthor());
@@ -62,6 +65,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
             public void onClick(View v) {
                 Intent webIntent = new Intent(context, WebActivity.class);
                 webIntent.putExtra("url",newsItem.getUrl());
+
                 //将点击的Item数据写入文件
                 whriteToFile(newsItem);
                 context.startActivity(webIntent);
@@ -76,7 +80,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
         if(!file.exists()){
             file.mkdirs() ;
         }
-        File file2 = new File(file.getAbsoluteFile()  + "/NewsHistory.txt" ) ;
+        File file2 = new File(file.getAbsoluteFile()  + "/" +fileName) ;
         //先读取原有的历史数据
         ObjectInputStream objectInputStream = null;
         try {

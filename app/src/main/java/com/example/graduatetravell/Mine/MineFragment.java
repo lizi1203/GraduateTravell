@@ -92,7 +92,8 @@ public class MineFragment extends Fragment {
                         startActivity(intentToRelaxHistory);
                         break;
                     case 3:
-//                        Toast.makeText(MainActivity.this,"第"+position+"个item", Toast.LENGTH_SHORT).show();
+                        Intent intentToNewsHistory = new Intent(getContext(),NewsHistoryActivity.class);
+                        startActivity(intentToNewsHistory);
                         break;
                 }
             }
