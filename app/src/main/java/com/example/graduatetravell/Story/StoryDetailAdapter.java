@@ -1,10 +1,12 @@
 package com.example.graduatetravell.Story;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +23,8 @@ public class StoryDetailAdapter extends ArrayAdapter<StoryDetailItemModal> {
 
     private int resourceId;
     private LayoutInflater inflater;
+
+
 
     public StoryDetailAdapter(@NonNull Context context, int resource, @NonNull List objects) {
         super(context, resource, objects);

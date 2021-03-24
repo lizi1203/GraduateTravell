@@ -9,8 +9,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -42,6 +46,10 @@ public class StoryDetailActivity extends AppCompatActivity {
 
     //ProgressBar部分
     private Dialog dialog;
+    private ImageButton positionButton;
+
+    //Location部分
+    private String location;
 
 
     @Override
@@ -83,6 +91,8 @@ public class StoryDetailActivity extends AppCompatActivity {
             }
 
         };
+
+
     }
 
 
@@ -108,6 +118,8 @@ public class StoryDetailActivity extends AppCompatActivity {
                         JsonObject jsonObject = new JsonParser().parse(responseData).getAsJsonObject();
 
                         StoryDetailBean storyDetailBean = new Gson().fromJson(jsonObject,StoryDetailBean.class);
+                        location = storyDetailBean.getCity_slug_urls().get(0);
+                        location = location.substring(1,location.lastIndexOf("/"));
                         //对象中拿到集合
                         StoryDetailBean.UserBean storyUserBean = storyDetailBean.getUser();
                         ArrayList<StoryDetailItemModal> tempItemModals = new ArrayList<>();
@@ -147,7 +159,25 @@ public class StoryDetailActivity extends AppCompatActivity {
             case android.R.id.home:
                 this.finish(); // back button
                 return true;
+            case R.id.hotel_button:
+                Intent intentToAirbnb = new Intent(StoryDetailActivity.this,LocationWebActivity.class);
+                intentToAirbnb.putExtra("location",location);
+                startActivity(intentToAirbnb);
+                return true;
+            case R.id.location_button:
+                Intent intentToMap = new Intent(StoryDetailActivity.this,MapActivity.class);
+                intentToMap.putExtra("location",location);
+                startActivity(intentToMap);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_manu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
 }
