@@ -118,8 +118,8 @@ public class StoryDetailActivity extends AppCompatActivity {
                         JsonObject jsonObject = new JsonParser().parse(responseData).getAsJsonObject();
 
                         StoryDetailBean storyDetailBean = new Gson().fromJson(jsonObject,StoryDetailBean.class);
-                        location = storyDetailBean.getCity_slug_urls().get(0);
-                        location = location.substring(1,location.lastIndexOf("/"));
+                        location = storyDetailBean.getCities().get(0);
+//                        location = location.substring(1,location.lastIndexOf("/"));
                         //对象中拿到集合
                         StoryDetailBean.UserBean storyUserBean = storyDetailBean.getUser();
                         ArrayList<StoryDetailItemModal> tempItemModals = new ArrayList<>();

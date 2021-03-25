@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.graduatetravell">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -40,6 +41,8 @@
             <meta-data
                 android:name="com.baidu.lbsapi.API_KEY"
                 android:value="RtYnfvtfoHtoSbo0iKZLqqZGrcEG2tg4" />
+
+        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote"/>
 
     </application>
 

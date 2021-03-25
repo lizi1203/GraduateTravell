@@ -7,6 +7,7 @@ public class StoryDetailBean {
     private UserBean user;
     private List<DateBean> days;
     private List<String> city_slug_urls;
+    private List<String> cities;
 
     public StoryDetailBean(String cover_image, UserBean user, List<DateBean> days) {
         this.cover_image = cover_image;
@@ -47,6 +48,14 @@ public class StoryDetailBean {
 
     public void setCity_slug_urls(List<String> city_slug_urls) {
         this.city_slug_urls = city_slug_urls;
+    }
+
+    public List<String> getCities() {
+        return cities;
+    }
+
+    public void setCities(List<String> cities) {
+        this.cities = cities;
     }
 
 
