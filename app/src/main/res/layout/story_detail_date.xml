@@ -7,13 +7,12 @@
 
     <ImageView
         android:id="@+id/story_detail_date_imageView"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:padding="10dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:id="@+id/story_detail_date_textView"

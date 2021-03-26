@@ -1,6 +1,10 @@
 package com.example.graduatetravell.Mine;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,10 +12,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.graduatetravell.LoginActivity;
 import com.example.graduatetravell.R;
@@ -121,11 +127,48 @@ public class MineFragment extends Fragment {
         logout_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                createDialog();
+            }
+        });
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private void createDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("提示：");
+        builder.setMessage("您确定要退出登录吗？");
+        builder.setIcon(R.mipmap.ic_launcher_round);
+        //点击对话框以外的区域是否让对话框消失
+        builder.setCancelable(true);
+        //设置正面按钮
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 Intent logoutIntent = new Intent(getContext(), LoginActivity.class);
                 getActivity().finish();
                 startActivity(logoutIntent);
+                Toast.makeText(getContext(), "退出成功", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
+        //设置反面按钮
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.setIcon(R.drawable.question);
+        //设置对话框颜色
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();//获取dialog布局的参数
+        dialog.getWindow().setBackgroundDrawableResource(R.color.grey);
+
+        dialog.show();
+        Button btnPositive = (Button)dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        btnPositive.setTextColor(Color.parseColor("#FF000000"));
+        Button btnNegative = (Button)dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        btnNegative.setTextColor(Color.parseColor("#FF000000"));
     }
 
 }

@@ -101,10 +101,16 @@ public class StoryDetailAdapter extends ArrayAdapter<StoryDetailItemModal> {
                 viewHolderHead.baseText.setText(storyDetailItemModal.getBreifText());
                 break;
             case 1:
+                Glide.with(getContext()).load(R.drawable.date).into(viewHolderDate.datetImage);
                 viewHolderDate.dateText.setText(storyDetailItemModal.getText()+" 第"+storyDetailItemModal.getBreifText()+"天");
                 break;
             case 2:
-                Glide.with(getContext()).load(storyDetailItemModal.getBackImage()).into(viewHolderBase.baseImage);
+                if(storyDetailItemModal.getBackImage().equals(""))
+                {
+                    viewHolderBase.baseImage.setVisibility(View.GONE);
+                }else {
+                    Glide.with(getContext()).load(storyDetailItemModal.getBackImage()).into(viewHolderBase.baseImage);
+                }
                 viewHolderBase.baseText.setText(storyDetailItemModal.getText());
                 break;
         }

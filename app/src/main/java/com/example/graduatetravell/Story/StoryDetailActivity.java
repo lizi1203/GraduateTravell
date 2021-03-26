@@ -74,6 +74,7 @@ public class StoryDetailActivity extends AppCompatActivity {
         detailListView.setAdapter(adapter);
 
         dialog = new ProgressDialog(StoryDetailActivity.this,ProgressDialog.THEME_HOLO_DARK);
+        dialog.setTitle("正在加载");
 
         getDetailData(detailID);
         handler = new Handler(){
