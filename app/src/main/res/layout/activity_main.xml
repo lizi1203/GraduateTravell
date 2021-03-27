@@ -7,6 +7,8 @@
     android:background="@color/black"
     tools:context=".MainActivity">
 
+
+
     <!--滑动视图-->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/main_viewPage"
@@ -16,7 +18,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </androidx.viewpager.widget.ViewPager>
 
     <!--底部导航栏-->
     <RadioGroup
@@ -32,9 +36,9 @@
         <!--导航栏按钮-->
         <RadioButton
             android:id="@+id/notes_tab"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.25"
+            android:layout_weight="0.2"
             android:button="@null"
             android:checked="true"
             android:drawableTop="@drawable/hot_tab_image_selector"
@@ -45,9 +49,9 @@
 
         <RadioButton
             android:id="@+id/hot_tab"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.25"
+            android:layout_weight="0.2"
             android:button="@null"
             android:drawableTop="@drawable/notes_tab_image_selector"
             android:gravity="center_horizontal"
@@ -55,11 +59,16 @@
             android:textColor="@drawable/radiobutton_color_selector"
             android:textSize="18dp" />
 
+        <View
+            android:layout_height="45dp"
+            android:layout_width="40dp"
+            android:layout_weight="0.2"/>
+
         <RadioButton
             android:id="@+id/news_tab"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.25"
+            android:layout_weight="0.2"
             android:button="@null"
             android:drawableTop="@drawable/news_tab_image_selector"
             android:gravity="center_horizontal"
@@ -69,9 +78,9 @@
 
         <RadioButton
             android:id="@+id/mine_tab"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.25"
+            android:layout_weight="0.2"
             android:button="@null"
             android:drawableTop="@drawable/mine_tab_umage_selector"
             android:gravity="center_horizontal"
@@ -80,4 +89,14 @@
             android:textSize="18dp" />
     </RadioGroup>
 
+    <ImageButton
+        android:id="@+id/plus_imageButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/plus"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

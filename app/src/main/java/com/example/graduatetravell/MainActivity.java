@@ -3,6 +3,8 @@ package com.example.graduatetravell;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private List<Fragment> mainFragments;
     private FragmentPagerAdapter mainAdapter;
 
+    private ImageButton plusButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initView();
         createNewFile();
+
+        plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentToEdit = new Intent(MainActivity.this,EditActivity.class);
+                startActivity(intentToEdit);
+            }
+        });
     }
 
     private void createNewFile() {
@@ -60,13 +72,14 @@ public class MainActivity extends AppCompatActivity {
         UserNameApplication app = (UserNameApplication) getApplication(); //获得我们的应用程序MyApplication
         app.setUserName(username);
         //init fragment
-        mainFragments = new ArrayList<>(4);
+        mainFragments = new ArrayList<>(5);
         mainFragments.add(StoryFragment.newInstance("热门","1"));
         mainFragments.add(RelaxFragment.newInstance("休闲","2"));
         mainFragments.add(NewsFragment.newInstance("新闻","3"));
+        mainFragments.add(NewsFragment.newInstance("新闻","4"));
         mainFragments.add(MineFragment.newInstance("我的",username));
         //init ViewPager
-        mainAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),4) {
+        mainAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),5) {
             @NonNull
             @Override
             public Fragment getItem(int position) {
@@ -82,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         //注册监听者
         mainViewPager.addOnPageChangeListener(mainPageChangeListener);
         mainTabRadioGroup.setOnCheckedChangeListener(mainOnCheckedChangeListener);
+
+        plusButton = (ImageButton)findViewById(R.id.plus_imageButton);
     }
 
     @Override
@@ -91,15 +106,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ViewPager.OnPageChangeListener mainPageChangeListener = new ViewPager.OnPageChangeListener() {
+        private int currentPosition = 0;
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            if(position == 2 ){
+                if(position>currentPosition) {
+                    mainViewPager.setCurrentItem(3);
+                    currentPosition=3;
+                }
+//                else{
+//                    mainViewPager.setCurrentItem(1);
+//                    currentPosition = 2;
+//                }
+            }
         }
 
         @Override
         public void onPageSelected(int position) {
-            RadioButton radioButton = (RadioButton)mainTabRadioGroup.getChildAt(position);
-            radioButton.setChecked(true);
+            if(position != 2) {
+                RadioButton radioButton = (RadioButton) mainTabRadioGroup.getChildAt(position);
+                radioButton.setChecked(true);
+                currentPosition = position;
+            }
         }
 
         @Override
