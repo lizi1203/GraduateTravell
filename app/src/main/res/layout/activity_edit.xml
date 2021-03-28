@@ -7,35 +7,21 @@
     tools:context=".EditActivity"
     android:background="@drawable/background_noword">
 
-    <EditText
-        android:id="@+id/title_editText"
+    <ListView
+        android:id="@+id/edit_listview"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="10dp"
-        android:textSize="18dp"
-        android:gravity="center"
-        android:hint="please input title"></EditText>
+        android:layout_height="match_parent"></ListView>
 
-    <ImageView
-        android:id="@+id/add_imageView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/image"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_editText" />
 
     <Button
-        android:id="@+id/addImage_button"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintBottom_toBottomOf="@+id/add_imageView"
+        android:id="@+id/addItem_button"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_editText"
-        android:backgroundTint="@android:color/transparent"/>
-
+        android:text="+ 添加新的图文"
+        android:textSize="18dp"/>
     <!--    <EditText-->
 <!--        android:id="@+id/content_editText"-->
 <!--        android:layout_width="match_parent"-->
