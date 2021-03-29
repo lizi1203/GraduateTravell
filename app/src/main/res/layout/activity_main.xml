@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:button="@null"
-            android:drawableTop="@drawable/mine_tab_umage_selector"
+            android:drawableTop="@drawable/mine_tab_image_selector"
             android:gravity="center_horizontal"
             android:text="我的"
             android:textColor="@drawable/radiobutton_color_selector"

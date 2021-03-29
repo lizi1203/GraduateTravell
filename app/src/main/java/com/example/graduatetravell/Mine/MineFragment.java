@@ -90,14 +90,18 @@ public class MineFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 1:
+                        Intent intentToMineNote = new Intent(getContext(),MineNoteActivity.class);
+                        startActivity(intentToMineNote);
+                        break;
+                    case 2:
                         Intent intentToStoryHistory = new Intent(getContext(),StoryHistoryActivity.class);
                         startActivity(intentToStoryHistory);
                         break;
-                    case 2:
+                    case 3:
                         Intent intentToRelaxHistory = new Intent(getContext(),RelaxHistoryActivity.class);
                         startActivity(intentToRelaxHistory);
                         break;
-                    case 3:
+                    case 4:
                         Intent intentToNewsHistory = new Intent(getContext(),NewsHistoryActivity.class);
                         startActivity(intentToNewsHistory);
                         break;
@@ -114,9 +118,10 @@ public class MineFragment extends Fragment {
 
     private void initData() {
         mineListItemModals.add(new MineListItemModal(mParam2,R.drawable.head,0));
-        mineListItemModals.add(new MineListItemModal("热门浏览历史",R.drawable.mystory,1));
-        mineListItemModals.add(new MineListItemModal("休闲浏览历史",R.drawable.myhot,1));
-        mineListItemModals.add(new MineListItemModal("新闻浏览历史",R.drawable.mynews,1));
+        mineListItemModals.add(new MineListItemModal("我发布的帖子",R.drawable.list,1));
+        mineListItemModals.add(new MineListItemModal("热门浏览历史",R.drawable.star,1));
+        mineListItemModals.add(new MineListItemModal("休闲浏览历史",R.drawable.hot,1));
+        mineListItemModals.add(new MineListItemModal("新闻浏览历史",R.drawable.news,1));
     }
 
     @Override

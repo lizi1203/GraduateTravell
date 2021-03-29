@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GraduateTravell.newActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".EditActivity"></activity>
+        <activity android:name=".Mine.MineNoteActivity"></activity>
+        <activity android:name=".EditActivity" />
         <activity android:name=".Story.MapActivity" />
         <activity android:name=".Story.LocationWebActivity" />
         <activity android:name=".Mine.NewsHistoryActivity" />

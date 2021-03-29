@@ -106,6 +106,7 @@ public class NewsFragment extends Fragment {
                 if (msg.what == 3)
                 {
                     newsListItemModalArrayList.addAll((ArrayList<NewsListItemModal>) msg.obj);
+                    if(adapter!=null)
                     adapter.notifyDataSetChanged();
                 }
                 else

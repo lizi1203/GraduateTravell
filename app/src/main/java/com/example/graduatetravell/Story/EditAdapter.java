@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ public class EditAdapter extends BaseAdapter {
     private List<EditBean> mData;
     private Context mContext;
     private SubClickListener subClickListener;
+    private Bitmap bm;
 
     public EditAdapter(Context mContext, List<EditBean> mData) {
         this.mContext = mContext;
@@ -84,7 +86,8 @@ public class EditAdapter extends BaseAdapter {
         }
 
         holder.editText.setText(itemObj.getEditText());
-        holder.imageView.setImageBitmap(itemObj.getImagePath());
+        bm = BitmapFactory.decodeFile(itemObj.getImagePath());
+        holder.imageView.setImageBitmap(bm);
         holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         TextWatcher watcher = new TextWatcher() {
@@ -139,6 +142,8 @@ public class EditAdapter extends BaseAdapter {
         }
     }
 
+
+    //回调方法，当adapter中的部件被点击时，可以传递当前position到activity中进行操作
     public void setsubClickListener(SubClickListener topicClickListener) {
         this.subClickListener = topicClickListener;
     }
