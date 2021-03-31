@@ -6,12 +6,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -31,12 +36,21 @@ import android.widget.Toast;
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.example.graduatetravell.Manager.UserNameApplication;
+import com.example.graduatetravell.Mine.MineNoteRecyclerModal;
 import com.example.graduatetravell.Story.EditAdapter;
 import com.example.graduatetravell.Story.EditBean;
 import com.example.graduatetravell.Story.LocationWebActivity;
 import com.example.graduatetravell.Story.StoryDetailActivity;
+import com.example.graduatetravell.Story.StoryRecyclerItemModal;
 import com.google.gson.Gson;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,9 +72,15 @@ public class EditActivity extends AppCompatActivity {
     private EditAdapter mAdapter;
     private List<EditBean> mData;
 
+    //获取当前上传图片的item位置
     private int curPosition;
+    //将recyclerview的数据转换成JSON格式
     private String editJson;
     private UserNameApplication userNameApplication;
+
+    //用Modal将数据存入文件
+    private MineNoteRecyclerModal mineNoteRecyclerModal;
+    private ArrayList<MineNoteRecyclerModal> tempRecyclerItemModalList;
 
     private Handler handler;
 
@@ -68,6 +88,8 @@ public class EditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        userNameApplication =  (UserNameApplication) getApplicationContext();
+        tempRecyclerItemModalList = new ArrayList<MineNoteRecyclerModal>();
 
 
         ActionBar actionBar = getSupportActionBar();
@@ -106,6 +128,8 @@ public class EditActivity extends AppCompatActivity {
                 if (msg.what == 8)
                 {
                     Toast.makeText(EditActivity.this,"上传成功",Toast.LENGTH_SHORT).show();
+                    mineNoteRecyclerModal = new MineNoteRecyclerModal(userNameApplication.getUserName(),null,mData.get(0).getEditText(),mData.get(0).getImagePath(),editJson);
+                    whriteToFile(mineNoteRecyclerModal);
                     EditActivity.this.finish();
                 }
                 else
@@ -126,8 +150,7 @@ public class EditActivity extends AppCompatActivity {
             case R.id.ok_button:
                 Gson gson = new Gson();
                 editJson = gson.toJson(mData);
-                //传递数据到后台
-                upLoadData();
+                createDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -135,7 +158,6 @@ public class EditActivity extends AppCompatActivity {
 
     private void upLoadData() {
         //获取编辑框中输入的姓名和密码
-        userNameApplication = (UserNameApplication) getApplicationContext();
         String username = userNameApplication.getUserName();
                 new Thread(new Runnable() {
                     @Override
@@ -227,5 +249,77 @@ public class EditActivity extends AppCompatActivity {
 
         mData.get(postion).setImagePath(imagePath);
         mAdapter.notifyDataSetChanged();
+    }
+
+    //发布前询问
+    @SuppressLint("ResourceAsColor")
+    private void createDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示：");
+        builder.setMessage("您确定要发布吗？");
+        builder.setIcon(R.mipmap.ic_launcher_round);
+        //点击对话框以外的区域是否让对话框消失
+        builder.setCancelable(true);
+        //设置正面按钮
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //传递数据到后台
+//                upLoadData();
+                mineNoteRecyclerModal = new MineNoteRecyclerModal(userNameApplication.getUserName(),null,mData.get(0).getEditText(),mData.get(0).getImagePath(),editJson);
+                whriteToFile(mineNoteRecyclerModal);
+                dialog.dismiss();
+            }
+        });
+        //设置反面按钮
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.setIcon(R.drawable.question);
+        //设置对话框颜色
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();//获取dialog布局的参数
+        dialog.getWindow().setBackgroundDrawableResource(R.color.grey);
+
+        dialog.show();
+        Button btnPositive = (Button)dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        btnPositive.setTextColor(Color.parseColor("#FF000000"));
+        Button btnNegative = (Button)dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        btnNegative.setTextColor(Color.parseColor("#FF000000"));
+    }
+
+    private void whriteToFile(MineNoteRecyclerModal data) {
+        BufferedWriter writer ;
+        String path = this.getFilesDir().getAbsolutePath() ;
+        userNameApplication = (UserNameApplication) this.getApplicationContext(); //获取应用程序
+        File file = new File(path + "/" + userNameApplication.getUserName()) ;
+        if(!file.exists()){
+            file.mkdirs() ;
+        }
+        File file2 = new File(file.getAbsoluteFile()  + "/MineNote.txt") ;
+
+        //先读取原有的历史数据
+        ObjectInputStream objectInputStream = null;
+        try {
+            objectInputStream = new ObjectInputStream(new FileInputStream(file2));
+            tempRecyclerItemModalList = (ArrayList<MineNoteRecyclerModal>) objectInputStream.readObject();
+            objectInputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        tempRecyclerItemModalList.add(data);
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file2));
+            objectOutputStream.writeObject(tempRecyclerItemModalList);
+            objectOutputStream.close() ;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 }

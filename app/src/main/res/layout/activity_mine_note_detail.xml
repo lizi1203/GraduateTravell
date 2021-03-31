@@ -4,12 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Mine.MineNoteActivity"
+    tools:context=".Mine.MineNoteDetailActivity"
     android:background="@drawable/background_noword">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/minenote_recyclerView"
+    <ListView
+        android:id="@+id/minenote_detail_listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="380dp"
+        tools:layout_editor_absoluteY="620dp" >
 
+    </ListView>
 </androidx.constraintlayout.widget.ConstraintLayout>

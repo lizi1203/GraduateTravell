@@ -39,7 +39,7 @@ public class StoryDetailActivity extends AppCompatActivity {
     private String title;
     private Handler handler;
 
-    //recyclerView部分数据
+    //ListView部分数据
     private ListView detailListView;
     private StoryDetailAdapter adapter;;
     private ArrayList<StoryDetailItemModal> storyDetailItemModals = new ArrayList<>();

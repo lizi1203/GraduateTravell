@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.graduatetravell.Manager.UserNameApplication;
 import com.example.graduatetravell.R;
+import com.example.graduatetravell.Relax.RelaxDetailActivity;
 import com.example.graduatetravell.Story.StoryDetailActivity;
 import com.example.graduatetravell.Story.StoryFragment;
 import com.example.graduatetravell.Story.StoryRecyclerItemModal;
@@ -95,10 +96,16 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent detailIntent = new Intent(context, StoryDetailActivity.class);
-                    detailIntent.putExtra("detailID",data.getDetailID());
-                    detailIntent.putExtra("title",data.getItemTitle());
-
+                    Intent detailIntent;
+                    if(fileName.equals("StoryHistory.txt")) {
+                        detailIntent = new Intent(context, StoryDetailActivity.class);
+                        detailIntent.putExtra("detailID", data.getDetailID());
+                        detailIntent.putExtra("title", data.getItemTitle());
+                    }
+                    else{
+                        detailIntent = new Intent(context, RelaxDetailActivity.class);
+                        detailIntent.putExtra("detailID",data.getDetailID());
+                    }
                     //将点击的Item数据写入文件
                     whriteToFile(data);
                     context.startActivity(detailIntent);

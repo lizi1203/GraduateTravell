@@ -48,7 +48,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="270dp"
             android:padding="10dp"
-            android:text="XXXXXXXXXXXXXXXXXXXXXXXX正文"
             android:textColor="@color/white"
             android:layout_centerHorizontal="true"
             android:gravity="center"
