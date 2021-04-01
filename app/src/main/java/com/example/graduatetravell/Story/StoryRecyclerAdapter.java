@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.graduatetravell.Manager.UserNameApplication;
+import com.example.graduatetravell.Mine.MineNoteDetailActivity;
 import com.example.graduatetravell.R;
 
 import java.io.BufferedWriter;
@@ -92,18 +93,32 @@ public class StoryRecyclerAdapter extends RecyclerView.Adapter<StoryRecyclerAdap
             holder.title.setText(data.getItemTitle());//获取实体类中的name字段并设置
             holder.author.setText(data.getItemAuthor());//获取实体类中的breif字段并设置
             Glide.with(context).load(data.getIconURL()).into(holder.mainImage);
-            Glide.with(context).load(data.getItemHeadURL()).into(holder.headImage);
+            if(data.getItemHeadURL()!=null) {
+                Glide.with(context).load(data.getItemHeadURL()).into(holder.headImage);
+            }else{
+                Glide.with(context).load(R.drawable.head).into(holder.headImage);
+            }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent detailIntent = new Intent(context, StoryDetailActivity.class);
-                    detailIntent.putExtra("detailID",data.getDetailID());
-                    detailIntent.putExtra("title",data.getItemTitle());
+                    if(data.getDetailID()!=null) {//有详情页ID的
+                        Intent detailIntent = new Intent(context, StoryDetailActivity.class);
+                        detailIntent.putExtra("detailID", data.getDetailID());
+                        detailIntent.putExtra("title", data.getItemTitle());
 
-                    //将点击的Item数据写入文件
-                    whriteToFile(data);
-                    context.startActivity(detailIntent);
+                        //将点击的Item数据写入文件
+                        whriteToFile(data);
+                        context.startActivity(detailIntent);
+                    }
+                    else{//有数据库content的
+                        Intent detailIntent = new Intent(context, MineNoteDetailActivity.class);
+                        detailIntent.putExtra("editJson",data.getContent());
+
+                        //将点击的Item数据写入文件
+                        whriteToFile(data);
+                        context.startActivity(detailIntent);
+                    }
                 }
             });
         }

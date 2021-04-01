@@ -169,7 +169,7 @@ public class RelaxFragment extends Fragment {
 
                         ArrayList<StoryRecyclerItemModal> tempItemModals = new ArrayList<>();
                         for(RelaxResultBean.DataBean dataBean : relaxBeanList){
-                                StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(dataBean.getText(),dataBean.getIndex_cover(),dataBean.getUser().getName(),dataBean.getUser().getAvatar_l(),dataBean.getSpot_id());
+                                StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(dataBean.getText(),dataBean.getIndex_cover(),dataBean.getUser().getName(),dataBean.getUser().getAvatar_l(),dataBean.getSpot_id(),null);
                             tempItemModals.add(newModal);
                         }
 

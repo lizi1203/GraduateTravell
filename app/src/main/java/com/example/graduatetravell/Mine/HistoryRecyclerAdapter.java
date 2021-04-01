@@ -91,16 +91,27 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
             holder.title.setText(data.getItemTitle());//获取实体类中的name字段并设置
             holder.author.setText(data.getItemAuthor());//获取实体类中的breif字段并设置
             Glide.with(context).load(data.getIconURL()).into(holder.mainImage);
-            Glide.with(context).load(data.getItemHeadURL()).into(holder.headImage);
+            if(data.getItemHeadURL()!=null) {
+                Glide.with(context).load(data.getItemHeadURL()).into(holder.headImage);
+            }else{
+                Glide.with(context).load(R.drawable.head).into(holder.headImage);
+            }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent detailIntent;
                     if(fileName.equals("StoryHistory.txt")) {
-                        detailIntent = new Intent(context, StoryDetailActivity.class);
-                        detailIntent.putExtra("detailID", data.getDetailID());
-                        detailIntent.putExtra("title", data.getItemTitle());
+                        if(data.getDetailID()!=null) {//有详情页ID的
+                            detailIntent = new Intent(context, StoryDetailActivity.class);
+                            detailIntent.putExtra("detailID", data.getDetailID());
+                            detailIntent.putExtra("title", data.getItemTitle());
+                        }
+                        else{//有数据库content的
+                            detailIntent = new Intent(context, MineNoteDetailActivity.class);
+                            detailIntent.putExtra("editJson",data.getContent());
+                            context.startActivity(detailIntent);
+                        }
                     }
                     else{
                         detailIntent = new Intent(context, RelaxDetailActivity.class);

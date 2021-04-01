@@ -14,12 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -34,12 +36,15 @@ import com.example.graduatetravell.R;
 import com.example.graduatetravell.RegisterActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.orhanobut.logger.Logger;
 import com.scwang.smart.refresh.footer.BallPulseFooter;
+import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -48,7 +53,9 @@ import com.youth.banner.loader.ImageLoader;
 
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -76,9 +83,9 @@ public class StoryFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     //banner部分数据
-    Banner banner;
-    List<String> imageURL;
-    List<String> imageTitle;
+    private Banner banner;
+    private List<String> imageURL;
+    private List<String> imageTitle;
 
     //recyclerView部分数据
     private RecyclerView recyclerView;
@@ -92,6 +99,7 @@ public class StoryFragment extends Fragment {
     RefreshLayout refreshLayout;
     //控制加载数据的url
     long loadStart;
+    long sqlLoadStart = 1;
 
     public StoryFragment() {
         // Required empty public constructor
@@ -128,9 +136,17 @@ public class StoryFragment extends Fragment {
         handler = new Handler(){
             public void handleMessage(Message msg)
             {
-                if (msg.what == 1)
+                if (msg.what == 1)//拉取到网页JSON
                 {
                     storyRecyclerItemModals.addAll((ArrayList< StoryRecyclerItemModal>) msg.obj);
+                    adapter.notifyDataSetChanged();
+                }
+                else if(msg.what == 9){//拉取到数据库JSON
+                    ArrayList<StoryRecyclerItemModal> headAddRecyclerItemModals = new ArrayList<StoryRecyclerItemModal>();
+                    headAddRecyclerItemModals.addAll((ArrayList< StoryRecyclerItemModal>) msg.obj);
+                    headAddRecyclerItemModals.addAll(storyRecyclerItemModals);
+                    storyRecyclerItemModals.clear();
+                    storyRecyclerItemModals.addAll(headAddRecyclerItemModals);
                     adapter.notifyDataSetChanged();
                 }
                 else
@@ -154,6 +170,7 @@ public class StoryFragment extends Fragment {
         imageTitle.add("巴厘岛 | 总有一个假日，要属于bali");
     }
 
+    //上拉加载的算法
     private void initRecyclerData(long nextStart) {
         new Thread(new Runnable() {
             @Override
@@ -186,7 +203,7 @@ public class StoryFragment extends Fragment {
                         for(StoryResultBean.DataBean dataBean : storyBeanList){
                             List<StoryResultBean.StoryBean> realData = dataBean.getData();
                             for(StoryResultBean.StoryBean storyBean: realData){
-                                StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(storyBean.getName(),storyBean.getCover_image_default(),storyBean.getUser().getName(),storyBean.getUser().getAvatar_l(),storyBean.getId());
+                                StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(storyBean.getName(),storyBean.getCover_image_default(),storyBean.getUser().getName(),storyBean.getUser().getAvatar_l(),storyBean.getId(),null);
                                 tempItemModals.add(newModal);
                             }
 
@@ -248,7 +265,16 @@ public class StoryFragment extends Fragment {
         refreshLayout = view.findViewById(R.id.story_refreshlayout);
         BallPulseFooter footer = new BallPulseFooter(getContext());
         footer.setAnimatingColor(getResources().getColor(R.color.white));
+        refreshLayout.setRefreshHeader(new ClassicsHeader(getContext()).setAccentColor(getResources().getColor(R.color.white)));
         refreshLayout.setRefreshFooter(footer);
+
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                loadFromMysql(sqlLoadStart);
+                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
+            }
+        });
 
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -257,7 +283,7 @@ public class StoryFragment extends Fragment {
                 refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
             }
         });
-        refreshLayout.setEnableRefresh(false);//是否启用下拉刷新功能
+        refreshLayout.setEnableRefresh(true);//是否启用下拉刷新功能
         refreshLayout.setReboundDuration(300);//回弹动画时长（毫秒）
         refreshLayout.setDisableContentWhenLoading(true);//是否在加载的时候禁止列表的操作
 
@@ -271,6 +297,77 @@ public class StoryFragment extends Fragment {
         }
     }
 
+    //下拉刷新的方法
+    private void loadFromMysql(long nextStart) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String path = "http://10.0.2.2:8080/AndroidTest/mustDownload?loadStart=" +nextStart;
+                    OkHttpClient client = new OkHttpClient.Builder()
+                            .connectTimeout(5000, TimeUnit.MILLISECONDS)
+                            .readTimeout(5000, TimeUnit.MILLISECONDS)
+                            .build();//创建OkHttpClient对象
+                    Request request = new Request.Builder()
+                            .url(path)//请求接口。如果需要传参拼接到接口后面。
+                            .build();//创建Request 对象
+                    Response response = null;
+                    response = client.newCall(request).execute();//得到Response 对象
+                    String responseData = response.body().string();
+                    if (responseData!=null) {
+                        //Json的解析类对象
+                        JsonParser parser = new JsonParser();
+                        //将JSON的String 转成一个JsonArray对象
+                        JsonArray jsonArray = parser.parse(responseData).getAsJsonArray();
+                        Gson gson = new Gson();
+                        ArrayList<SqlReturnBean> sqlReturnBeans = new ArrayList<>();
+                        ArrayList<StoryRecyclerItemModal> tempItemModals = new ArrayList<>();
+                        //加强for循环遍历JsonArray
+                        for (JsonElement note : jsonArray) {
+                            //使用GSON，直接转成Bean对象
+                            SqlReturnBean sqlReturnBean = gson.fromJson(note, SqlReturnBean.class);
+                            sqlReturnBeans.add(sqlReturnBean);
+                            sqlBeanToModal(sqlReturnBean,tempItemModals);
+                        }
 
+                            //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
+                        Message message = new Message();
+                        message.what = 9;
+                        message.obj = tempItemModals;
+                        handler.sendMessage(message);
+                    }else
+                    {
+                        Looper.prepare();
+                        Toast.makeText(getContext(),"没有更新的内容！",Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+
+                } catch (MalformedURLException e) {
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
+
+    private void sqlBeanToModal(SqlReturnBean sqlReturnBean ,ArrayList<StoryRecyclerItemModal> tempItemModals) {
+        //Json的解析类对象
+        JsonParser parser = new JsonParser();
+        //将JSON的String 转成一个JsonArray对象
+        JsonArray jsonArray = parser.parse(sqlReturnBean.getContent()).getAsJsonArray();
+        Gson gson = new Gson();
+        ArrayList<EditBean> editBeans = new ArrayList<>();
+        //加强for循环遍历JsonArray
+        for (JsonElement item : jsonArray) {
+            //使用GSON，直接转成Bean对象
+            EditBean editBean = gson.fromJson(item, EditBean.class);
+            editBeans.add(editBean);
+        }
+//        location = storyDetailBean.getCities().get(0);
+        EditBean titleBean = editBeans.get(0);
+        StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(titleBean.getEditText(),titleBean.getImagePath(),sqlReturnBean.getUsername(),null,null,sqlReturnBean.getContent());
+        tempItemModals.add(newModal);
+    }
 
 }

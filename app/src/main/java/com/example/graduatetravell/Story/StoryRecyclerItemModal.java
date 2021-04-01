@@ -1,6 +1,7 @@
 package com.example.graduatetravell.Story;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class StoryRecyclerItemModal implements Serializable {
 
@@ -14,19 +15,21 @@ public class StoryRecyclerItemModal implements Serializable {
     private String itemHeadURL;
     //详情页数据的序列号
     private String detailID;
+    //详情页的数据JSON
+    private String content;
 
 
-    public StoryRecyclerItemModal() {
-
-    }
-
-    public StoryRecyclerItemModal(String itemTitle, String iconURL, String itemAuthor, String itemHeadURL, String detailID) {
+    public StoryRecyclerItemModal(String itemTitle, String iconURL, String itemAuthor, String itemHeadURL, String detailID, String content) {
         this.itemTitle = itemTitle;
         this.iconURL = iconURL;
         this.itemAuthor = itemAuthor;
         this.itemHeadURL = itemHeadURL;
         this.detailID = detailID;
+        this.content = content;
     }
+
+
+
 
 
     public String getItemTitle() {
@@ -83,11 +86,28 @@ public class StoryRecyclerItemModal implements Serializable {
             return false;
         if (!itemAuthor.equals( other.itemAuthor))
             return false;
-        if (!itemHeadURL.equals( other.itemHeadURL))
-            return false;
-        if (!detailID.equals( other.detailID))
-            return false;
+        if(itemHeadURL!=null) {
+            if (!itemHeadURL.equals(other.itemHeadURL))
+                return false;
+        }
+        if(detailID!=null) {
+            if (!detailID.equals(other.detailID))
+                return false;
+        }
+        if(content!=null){
+            if(!content.equals(other.content))
+                return false;
+        }
 
         return true;
+    }
+
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
