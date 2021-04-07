@@ -18,12 +18,15 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.example.graduatetravell.R;
 import com.example.graduatetravell.Story.GridSpacingItemDecoration;
+import com.example.graduatetravell.Story.SqlReturnBean;
 import com.example.graduatetravell.Story.StoryFragment;
 import com.example.graduatetravell.Story.StoryRecyclerAdapter;
 import com.example.graduatetravell.Story.StoryRecyclerItemModal;
 import com.example.graduatetravell.Story.StoryResultBean;
 import com.example.graduatetravell.Story.WebActivity;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.scwang.smart.refresh.footer.BallPulseFooter;
@@ -36,7 +39,9 @@ import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -76,7 +81,7 @@ public class RelaxFragment extends Fragment {
     //上拉加载模块
     RefreshLayout refreshLayout;
     //控制加载数据的url
-    private int loadStart;
+    private long loadStart;
 
     public RelaxFragment() {
         // Required empty public constructor
@@ -109,7 +114,7 @@ public class RelaxFragment extends Fragment {
         }
         loadStart = 0;
         initBannerData();
-        initRecyclerData(0);
+        initRecyclerData(loadStart);
         handler = new Handler(){
             public void handleMessage(Message msg)
             {
@@ -139,7 +144,7 @@ public class RelaxFragment extends Fragment {
         imageTitle.add("【一休妈】川西南行纪，没错，就是丁真的家乡");
     }
 
-    private void initRecyclerData(int loadStart) {
+    private void initRecyclerData(long loadStart) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -184,6 +189,60 @@ public class RelaxFragment extends Fragment {
                 }
             }
         }).start();
+
+
+        //数据库数据
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    String path = "http://10.0.2.2:8080/AndroidTest/mustDownload?chartname=relax&loadStart=" +loadStart;
+//                    OkHttpClient client = new OkHttpClient.Builder()
+//                            .connectTimeout(5000, TimeUnit.MILLISECONDS)
+//                            .readTimeout(5000, TimeUnit.MILLISECONDS)
+//                            .build();//创建OkHttpClient对象
+//                    Request request = new Request.Builder()
+//                            .url(path)//请求接口。如果需要传参拼接到接口后面。
+//                            .build();//创建Request 对象
+//                    Response response = null;
+//                    response = client.newCall(request).execute();//得到Response 对象
+//                    String responseData = response.body().string();
+//                    if (responseData!=null) {
+//                        //Json的解析类对象
+//                        JsonParser parser = new JsonParser();
+//                        //将JSON的String 转成一个JsonArray对象
+//                        JsonArray jsonArray = parser.parse(responseData).getAsJsonArray();
+//                        Gson gson = new Gson();
+//                        ArrayList<SqlReturnBean> sqlReturnBeans = new ArrayList<>();
+//                        ArrayList<StoryRecyclerItemModal> tempItemModals = new ArrayList<>();
+//                        //加强for循环遍历JsonArray
+//                        for (JsonElement note : jsonArray) {
+//                            //使用GSON，直接转成Bean对象
+//                            SqlReturnBean sqlReturnBean = gson.fromJson(note, SqlReturnBean.class);
+//                            sqlReturnBeans.add(sqlReturnBean);
+////                            sqlBeanToModal(sqlReturnBean,tempItemModals);
+//                            StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(sqlReturnBean.getTitle(),sqlReturnBean.getCover_image_default(),sqlReturnBean.getUsername(),sqlReturnBean.getUserhead(),null,sqlReturnBean.getContent());
+//                            tempItemModals.add(newModal);
+//                            nextStart = sqlReturnBean.getNoteID()+1;
+//                        }
+//
+//                        //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
+//                        Message message = new Message();
+//                        message.what = 2;
+//                        message.obj = tempItemModals;
+//                        handler.sendMessage(message);
+//                    }else
+//                    {
+//                    }
+//
+//                } catch (MalformedURLException e) {
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+
 
     }
 

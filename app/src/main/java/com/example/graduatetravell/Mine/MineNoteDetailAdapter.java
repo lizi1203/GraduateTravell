@@ -1,6 +1,7 @@
 package com.example.graduatetravell.Mine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
+import com.example.graduatetravell.Manager.UserNameApplication;
 import com.example.graduatetravell.R;
 import com.example.graduatetravell.Relax.RelaxDetailAdapter;
 import com.example.graduatetravell.Story.EditBean;
@@ -24,6 +26,7 @@ public class MineNoteDetailAdapter extends ArrayAdapter<EditBean> {
 
     private int resourceId;
     private LayoutInflater inflater;
+    private UserNameApplication app;
 
 
 
@@ -85,7 +88,9 @@ public class MineNoteDetailAdapter extends ArrayAdapter<EditBean> {
             case 0:
                 Glide.with(getContext()).load(editBean.getImagePath()).into(viewHolderHead.baseImage);
                 Glide.with(getContext()).load(R.drawable.head).into(viewHolderHead.headImage);
-                viewHolderHead.titleText.setText(editBean.getEditText());
+                viewHolderHead.baseText.setText(editBean.getEditText());
+                app = (UserNameApplication) getContext().getApplicationContext();
+                viewHolderHead.titleText.setText("by "+app.getUserName());
                 break;
             case 1:
                 if(editBean.getImagePath().equals(""))

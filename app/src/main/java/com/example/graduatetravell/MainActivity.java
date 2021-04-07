@@ -109,25 +109,25 @@ public class MainActivity extends AppCompatActivity {
         private int currentPosition = 0;
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            if(position == 2 ){
-                if(position>currentPosition) {
-                    mainViewPager.setCurrentItem(3);
-                    currentPosition=3;
-                }
+//            if(position == 2 ){
+//                if(position>currentPosition) {
+//                    mainViewPager.setCurrentItem(3);
+//                    currentPosition=3;
+//                }
 //                else{
 //                    mainViewPager.setCurrentItem(1);
 //                    currentPosition = 2;
 //                }
-            }
+//            }
         }
 
         @Override
         public void onPageSelected(int position) {
-            if(position != 2) {
-                RadioButton radioButton = (RadioButton) mainTabRadioGroup.getChildAt(position);
-                radioButton.setChecked(true);
-                currentPosition = position;
-            }
+//            if(position != 2) {
+//                RadioButton radioButton = (RadioButton) mainTabRadioGroup.getChildAt(position);
+//                radioButton.setChecked(true);
+//                currentPosition = position;
+//            }
         }
 
         @Override

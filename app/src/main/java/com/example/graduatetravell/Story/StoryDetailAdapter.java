@@ -98,7 +98,12 @@ public class StoryDetailAdapter extends ArrayAdapter<StoryDetailItemModal> {
                 Glide.with(getContext()).load(storyDetailItemModal.getBackImage()).into(viewHolderHead.baseImage);
                 Glide.with(getContext()).load(storyDetailItemModal.getHeadImage()).into(viewHolderHead.headImage);
                 viewHolderHead.titleText.setText(storyDetailItemModal.getText());
-                viewHolderHead.baseText.setText(storyDetailItemModal.getBreifText());
+                if(storyDetailItemModal.getBreifText().equals(""))
+                {
+                    viewHolderHead.baseText.setVisibility(View.GONE);
+                }else {
+                    viewHolderHead.baseText.setText(storyDetailItemModal.getBreifText());
+                }
                 break;
             case 1:
                 Glide.with(getContext()).load(R.drawable.date).into(viewHolderDate.datetImage);

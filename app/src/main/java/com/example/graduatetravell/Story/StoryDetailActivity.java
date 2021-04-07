@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.graduatetravell.R;
 import com.example.graduatetravell.Relax.RelaxDetailAdapter;
@@ -102,7 +104,14 @@ public class StoryDetailActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String url = "http://api.breadtrip.com/trips/"+detailID+"/waypoints/";
+                String url;
+                if(detailID.length()>2) {
+                    //面包旅行数据
+                    url = "http://api.breadtrip.com/trips/" + detailID + "/waypoints/";
+                }else {
+                    //数据库数据
+                    url = "http://10.0.2.2:8080/AndroidTest/mustGetNoteDetail?detailID="+detailID;
+                }
                 try {
                     OkHttpClient client = new OkHttpClient.Builder()
                             .connectTimeout(5000, TimeUnit.MILLISECONDS)
@@ -143,6 +152,11 @@ public class StoryDetailActivity extends AppCompatActivity {
                         message.obj = tempItemModals;
                         handler.sendMessage(message);
 
+                    }else{
+                        Looper.prepare();
+                        Toast.makeText(StoryDetailActivity.this,"服务器出错",Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                        dialog.dismiss();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

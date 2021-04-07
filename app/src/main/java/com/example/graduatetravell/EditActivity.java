@@ -40,9 +40,13 @@ import com.example.graduatetravell.Mine.MineNoteRecyclerModal;
 import com.example.graduatetravell.Story.EditAdapter;
 import com.example.graduatetravell.Story.EditBean;
 import com.example.graduatetravell.Story.LocationWebActivity;
+import com.example.graduatetravell.Story.SqlReturnBean;
 import com.example.graduatetravell.Story.StoryDetailActivity;
 import com.example.graduatetravell.Story.StoryRecyclerItemModal;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -150,6 +154,13 @@ public class EditActivity extends AppCompatActivity {
             case R.id.ok_button:
                 Gson gson = new Gson();
                 editJson = gson.toJson(mData);
+//                JsonParser parser = new JsonParser();
+//                JsonArray jsonArray = parser.parse(editJson).getAsJsonArray();
+//                for (JsonElement note : jsonArray ) {
+//                    //使用GSON，直接转成Bean对象
+//                    SqlReturnBean sqlReturnBean = gson.fromJson(note, SqlReturnBean.class);
+//                }
+
                 createDialog();
                 return true;
         }
@@ -265,9 +276,9 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //传递数据到后台
-//                upLoadData();
+                upLoadData();
                 mineNoteRecyclerModal = new MineNoteRecyclerModal(userNameApplication.getUserName(),null,mData.get(0).getEditText(),mData.get(0).getImagePath(),editJson);
-                whriteToFile(mineNoteRecyclerModal);
+//                whriteToFile(mineNoteRecyclerModal);
                 dialog.dismiss();
             }
         });

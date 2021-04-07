@@ -114,6 +114,7 @@ public class StoryRecyclerAdapter extends RecyclerView.Adapter<StoryRecyclerAdap
                     else{//有数据库content的
                         Intent detailIntent = new Intent(context, MineNoteDetailActivity.class);
                         detailIntent.putExtra("editJson",data.getContent());
+                        detailIntent.putExtra("username",data.getItemAuthor());
 
                         //将点击的Item数据写入文件
                         whriteToFile(data);

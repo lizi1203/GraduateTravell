@@ -28,7 +28,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.graduatetravell.LoginActivity;
 import com.example.graduatetravell.Manager.DataManager;
+import com.example.graduatetravell.Manager.UserNameApplication;
 import com.example.graduatetravell.Mine.MineListItemModal;
+import com.example.graduatetravell.Mine.MineNoteRecyclerModal;
 import com.example.graduatetravell.News.NewsAdapter;
 import com.example.graduatetravell.News.NewsListItemModal;
 import com.example.graduatetravell.News.NewsResultBean;
@@ -53,7 +55,10 @@ import com.youth.banner.loader.ImageLoader;
 
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -92,6 +97,7 @@ public class StoryFragment extends Fragment {
     private ArrayList<StoryRecyclerItemModal> storyRecyclerItemModals = new ArrayList<StoryRecyclerItemModal>();
     private StoryRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private UserNameApplication app;
 
     Handler handler;
 
@@ -132,6 +138,7 @@ public class StoryFragment extends Fragment {
         }
         loadStart = 1;
         initBannerData();
+        getSQLRecyclerData();
         initRecyclerData(loadStart);
         handler = new Handler(){
             public void handleMessage(Message msg)
@@ -172,6 +179,7 @@ public class StoryFragment extends Fragment {
 
     //上拉加载的算法
     private void initRecyclerData(long nextStart) {
+        //面包旅行网络数据
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -221,8 +229,61 @@ public class StoryFragment extends Fragment {
             }
         }).start();
 
+
     }
 
+
+    private void getSQLRecyclerData(/*long nextStart*/) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String path = "http://10.0.2.2:8080/AndroidTest/mustDownload?chartname=note&loadStart=1" /*+nextStart*/;
+                    OkHttpClient client = new OkHttpClient.Builder()
+                            .connectTimeout(5000, TimeUnit.MILLISECONDS)
+                            .readTimeout(5000, TimeUnit.MILLISECONDS)
+                            .build();//创建OkHttpClient对象
+                    Request request = new Request.Builder()
+                            .url(path)//请求接口。如果需要传参拼接到接口后面。
+                            .build();//创建Request 对象
+                    Response response = null;
+                    response = client.newCall(request).execute();//得到Response 对象
+                    String responseData = response.body().string();
+                    if (responseData!=null) {
+                        //Json的解析类对象
+                        JsonParser parser = new JsonParser();
+                        //将JSON的String 转成一个JsonArray对象
+                        JsonArray jsonArray = parser.parse(responseData).getAsJsonArray();
+                        Gson gson = new Gson();
+                        ArrayList<SqlReturnBean> sqlReturnBeans = new ArrayList<>();
+                        ArrayList<StoryRecyclerItemModal> tempItemModals = new ArrayList<>();
+                        //加强for循环遍历JsonArray
+                        for (JsonElement note : jsonArray) {
+                            //使用GSON，直接转成Bean对象
+                            SqlReturnBean sqlReturnBean = gson.fromJson(note, SqlReturnBean.class);
+                            sqlReturnBeans.add(sqlReturnBean);
+//                            sqlBeanToModal(sqlReturnBean,tempItemModals);
+                            StoryRecyclerItemModal newModal = new StoryRecyclerItemModal(sqlReturnBean.getTitle(),sqlReturnBean.getCover_image_default(),sqlReturnBean.getUsername(),sqlReturnBean.getUserhead(),String.valueOf(sqlReturnBean.getNoteID()),sqlReturnBean.getContent());
+                            tempItemModals.add(newModal);
+                            loadStart = sqlReturnBean.getNoteID()+1;
+                        }
+
+                        //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
+                        Message message = new Message();
+                        message.what = 1;
+                        message.obj = tempItemModals;
+                        handler.sendMessage(message);
+                    }else
+                    {
+                    }
+
+                } catch (MalformedURLException e) {
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -303,7 +364,7 @@ public class StoryFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    String path = "http://10.0.2.2:8080/AndroidTest/mustDownload?loadStart=" +nextStart;
+                    String path = "http://10.0.2.2:8080/AndroidTest/mustGetNote?loadStart=" +nextStart;
                     OkHttpClient client = new OkHttpClient.Builder()
                             .connectTimeout(5000, TimeUnit.MILLISECONDS)
                             .readTimeout(5000, TimeUnit.MILLISECONDS)
@@ -315,21 +376,39 @@ public class StoryFragment extends Fragment {
                     response = client.newCall(request).execute();//得到Response 对象
                     String responseData = response.body().string();
                     if (responseData!=null) {
-                        //Json的解析类对象
-                        JsonParser parser = new JsonParser();
-                        //将JSON的String 转成一个JsonArray对象
-                        JsonArray jsonArray = parser.parse(responseData).getAsJsonArray();
-                        Gson gson = new Gson();
-                        ArrayList<SqlReturnBean> sqlReturnBeans = new ArrayList<>();
+//                        //Json的解析类对象
+//                        JsonParser parser = new JsonParser();
+//                        //将JSON的String 转成一个JsonArray对象
+//                        JsonArray jsonArray = parser.parse(responseData).getAsJsonArray();
+//                        Gson gson = new Gson();
+//                        ArrayList<SqlReturnBean> sqlReturnBeans = new ArrayList<>();
+//                        ArrayList<StoryRecyclerItemModal> tempItemModals = new ArrayList<>();
+//                        //加强for循环遍历JsonArray
+//                        for (JsonElement note : jsonArray) {
+//                            //使用GSON，直接转成Bean对象
+//                            SqlReturnBean sqlReturnBean = gson.fromJson(note, SqlReturnBean.class);
+//                            sqlReturnBeans.add(sqlReturnBean);
+//                            sqlBeanToModal(sqlReturnBean,tempItemModals);
+//                        }
                         ArrayList<StoryRecyclerItemModal> tempItemModals = new ArrayList<>();
-                        //加强for循环遍历JsonArray
-                        for (JsonElement note : jsonArray) {
-                            //使用GSON，直接转成Bean对象
-                            SqlReturnBean sqlReturnBean = gson.fromJson(note, SqlReturnBean.class);
-                            sqlReturnBeans.add(sqlReturnBean);
-                            sqlBeanToModal(sqlReturnBean,tempItemModals);
+                        String filePath = getContext().getFilesDir().getAbsolutePath();
+                        app = (UserNameApplication) getContext().getApplicationContext(); //获取应用程序
+                        File file = new File(filePath + "/" + app.getUserName()) ;
+                        File file2 = new File(file.getAbsoluteFile()  + "/MineNote.txt") ;
+                        ObjectInputStream objectInputStream = null;
+                        try {
+                            objectInputStream = new ObjectInputStream(new FileInputStream(file2));
+                            ArrayList<MineNoteRecyclerModal> tempMineItemModals = new ArrayList<>();
+                            tempMineItemModals = (ArrayList<MineNoteRecyclerModal>) objectInputStream.readObject();
+                            for (MineNoteRecyclerModal item : tempMineItemModals) {
+                                //使用GSON，直接转成Bean对象
+                                StoryRecyclerItemModal tempModal = new StoryRecyclerItemModal(item.getTitle(),item.getImage(),item.getUserName(),null,null,item.getContent());
+                                tempItemModals.add(tempModal);
+                            }
+                            objectInputStream.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-
                             //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
                         Message message = new Message();
                         message.what = 9;
@@ -355,7 +434,8 @@ public class StoryFragment extends Fragment {
         //Json的解析类对象
         JsonParser parser = new JsonParser();
         //将JSON的String 转成一个JsonArray对象
-        JsonArray jsonArray = parser.parse(sqlReturnBean.getContent()).getAsJsonArray();
+        String json = sqlReturnBean.getContent();
+        JsonArray jsonArray = parser.parse(json).getAsJsonArray();
         Gson gson = new Gson();
         ArrayList<EditBean> editBeans = new ArrayList<>();
         //加强for循环遍历JsonArray
